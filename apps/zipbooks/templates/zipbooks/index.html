@@ -1,0 +1,36 @@
+{% load i18n %}
+{% extends "zipbooks/base.html" %}
+{% block js %}
+<script type="text/javascript" src="/site_media/js/jquery.formbuilder.js"></script>
+<script type="text/javascript" src="/site_media/js/jquery.jform.js"></script>
+<script type="text/javascript">
+createbookslist = function(data, o){
+    var ol = $('<ol></ol>');
+    $.each(data, function(){
+        ol.append('<li class="book"><a href="$url">$title</a> $finished [<a href="download/$id/">Download</a>][<a href="download/$id/?onefile=true">One File</a>]</li>'.template(this));
+    });
+    $(o).empty().append(ol);
+}
+
+$(document).ready(function (){
+	var form = $('#addbook').formbuilder({action:"add/", id:"form_addbook"});
+	form.add($.DIV({id:"message"}));
+	form.addSimpleLine('{% trans "URL" %}:', $.TEXT({name:'url',className:'field'}), {required:true});
+	var footer=form.line($.SUBMIT({name:'submit', value:'Get'})).attr({className:'ft'});
+	form.add(footer);
+	$('#form_addbook').jform();
+	
+
+	$.get('booklist/', function(data){
+		var d = data.evalJson();
+		createbookslist(d.data, $('#books'));
+	});
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<h1>ZipBook</h1>
+<div id="addbook"></div>
+<div id="books"></div>
+{% endblock %}
