@@ -1,9 +1,28 @@
-#coding=gb2312
+#coding=utf-8
 modname = {
-    'www.duyidu.com':('duyidu', '¶ÁÒ»¶Á', 'http://www.duyidu.com'),
-    'www.readnovel.com':('readnovel', 'Ğ¡ËµÔÄ¶ÁÍø', 'http://www.readnovel.com'),
-    'book.sina.com.cn':('booksina', 'ĞÂÀË¶ÁÊé', 'http://book.sina.com.cn'),
+    'www.duyidu.com':('duyidu', 'è¯»ä¸€è¯»', 'http://www.duyidu.com'),
+    'www.readnovel.com':('readnovel', 'å°è¯´é˜…è¯»ç½‘', 'http://www.readnovel.com'),
+    'book.sina.com.cn':('booksina', 'æ–°æµªè¯»ä¹¦', 'http://book.sina.com.cn'),
 }
 def get_mod(domain):
     return modname.get(domain, (None, None, None))[0]
 
+def show_sites(n):
+    s = ['<table border=0>']
+    i = 0
+    for k, v in modname.items():
+        _, title, url = v
+        if i % n == 0:
+            if i != 0:
+                s.append('</tr>')
+            s.append('<tr>')
+        s.append('<td><a href="%s">%s</a></td>' % (url, title))
+        i += 1
+    if i>0:
+        s.append('</tr>')
+    s.append('</table>')
+    return ''.join(s)
+    
+if __name__ == '__main__':
+    print show_sites(3)
+        

@@ -81,6 +81,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     
     'apps.zipbooks',
+    'apps.common',
 )
 
 SITE_MEDIA = './media'
