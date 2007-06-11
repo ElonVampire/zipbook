@@ -1,0 +1,9 @@
+.error {
+color: red;
+}
+body, td, a, p, .h {
+font-family:arial,sans-serif;
+}
+img {
+border: none;
+}

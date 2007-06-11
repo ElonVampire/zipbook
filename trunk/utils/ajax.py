@@ -7,7 +7,7 @@ class SimpleAjaxException(Exception):pass
 def ajax_ok_data(data='', next=None, message=None):
     return ajax_data('ok', data=data, next=next, message=message)
 
-def ajax_fail_data(error='', next=None, message=None):
+def ajax_fail_data(error=[], next=None, message=None):
     return ajax_data('fail', error=error, next=next, message=message)
     
 def ajax_ok(data='', next=None, message=None):
@@ -17,7 +17,7 @@ def ajax_ok(data='', next=None, message=None):
     
     return json_response(ajax_ok_data(data, next, message))
 
-def ajax_fail(error='', next=None, message=None):
+def ajax_fail(error=[], next=None, message=None):
     """
     return an error response
     """
