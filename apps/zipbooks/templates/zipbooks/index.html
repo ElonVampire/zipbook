@@ -13,20 +13,26 @@ createbookslist = function(data, o){
     var table = $('<table border="0" width="99%"><tbody></tbody></table>');
     var t = table.find('tbody');
     var tr = null;
-    $.each(data, function(i){
+    var i = 0;
+    $.each(data, function(){
         if(i%3 == 0){
             tr = $('<tr></tr>').appendTo(t);
         }
         this.width = this.finished /100 * 40;
         this.img = this.finished==100?"/site_media/img/finish.jpg":"/site_media/img/unfinish.jpg";
         tr.append('<td width="40"><img src=$img title="$finished%" width="$width" height="5" align="absmiddle"/></td><td width="30%"><a href="download/$id/"><img src="/site_media/img/save.png" title="Download in multi files" align="absmiddle"/></a> <a href="download/$id/?onefile=true"><img src="/site_media/img/save_one.png" title="Download in one file" align="absmiddle"/></a> <a href="$url">$title</a></td>'.template(this));
+        i++;
     });
+    while(i%3!=0){
+        tr.append('<td width="40">&nbsp;</td><td width="30%">&nbsp;</td>');
+        i++;
+    }
     $(o).empty().append(table);
 };
 
 process_booklist = function(data){
     var data = data.evalJson().data;
-    createbookslist(data[2], $('#books'));
+    createbookslist(data[2], '#books');
     $('#pages').empty().paginate('booklist/', data[0], data[1]).append('<br style="clear:both;"/>');
     $('#pages a').click(function(){
         var href = this.href;
@@ -45,10 +51,19 @@ on_success_finish = function(e, r){
     $('.tabs').triggerTab(2);
 };
 
+on_success_finish_search = function(e, r){
+    $('#pages').empty();
+    var data = r.data;
+    createbookslist(data, '#books');
+};
+
 $(document).ready(function (){
     $('.tabs').tabs({onClick:tab_click});
+    $('.tabs').triggerTab(2);
 
-	$('#form_addbook').jform({on_success_finish:on_success_finish});
+	$('#form_addbook').jform({on_success_finish:on_success_finish, delaytime:3000});
+	$('#form_search').jform({on_success_finish:on_success_finish_search,
+        messageid:'#search_msg', delaytime:3000});
 
 });
 </script>
@@ -78,7 +93,8 @@ $(document).ready(function (){
     如果你希望了解本项目的源码，可以看[关于本站]的介绍。本项目为开源项目。
    </div>
    <div id="booklist" class="fragment">
-        <center><form action="search/">
+        <center><div id="search_msg"></div>
+        <form action="search/" id="form_search">
         输入要查找的书名 <input type="text" size="30" name="search"/> <input type="submit" value="查询"/>
         </form></center>
         <div id="books"></div>

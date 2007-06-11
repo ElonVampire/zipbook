@@ -1,8 +1,8 @@
+#coding=utf-8
 # Create your views here.
 from utils.common import render_template
 from utils.ajax import ajax_ok, ajax_fail
 from apps.zipbooks.models import Book
-from apps.zipbooks.validator import AddValidator
 from getbook import getbook
 from django.http import HttpResponse
 from utils.lib_page import Page
@@ -11,20 +11,19 @@ def index(request):
     return render_template(request, 'zipbooks/index.html')
 
 def add(request):
-    v = AddValidator()
-    f, obj = v.validate(request)
-    if f:
+    url = request.POST.get('url', '')
+    if url:
         try:
-            f, msg = getbook(v.clean_data()['url'])
+            f, msg = getbook(url)
         except Exception, e:
             import traceback
             traceback.print_exc()
             return ajax_fail(message=str(e))
         if f:
-            return ajax_ok({'id':msg.id}, message='Successful!', next='')
+            return ajax_ok({'id':msg.id}, message='处理成功')
         else:
             return ajax_fail(message=msg)
-    return ajax_fail(obj, message="There are something wrong")
+    return ajax_fail(message="请输入想下载书的目录URL")
         
 def booklist(request):
     s = []
@@ -64,3 +63,15 @@ def download(request, book_id):
     response.write(file(filename, 'rb').read())
     return response
     
+def search(request):
+    word = request.POST.get('search', '')
+    s = []
+    if word:
+        objs = Book.objects.filter(name__icontains=word)
+    else:
+        objs = Book.objects.all()
+    for o in objs:
+        s.append({'id':o.id, 'title':o.name, 'url':o.url, 'finished':o.finished*100/o.count})
+    return ajax_ok(s)
+                
+        
