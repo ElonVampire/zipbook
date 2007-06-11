@@ -10,24 +10,46 @@
 <script type="text/javascript" src="/site_media/js/jquery.tabs.pack.js"></script>
 <script type="text/javascript">
 createbookslist = function(data, o){
-    var ol = $('<ol></ol>');
-    $.each(data, function(){
+    var table = $('<table border="0" width="99%"><tbody></tbody></table>');
+    var t = table.find('tbody');
+    var tr = null;
+    $.each(data, function(i){
+        if(i%3 == 0){
+            tr = $('<tr></tr>').appendTo(t);
+        }
         this.width = this.finished /100 * 40;
         this.img = this.finished==100?"/site_media/img/finish.jpg":"/site_media/img/unfinish.jpg";
-        ol.append('<li class="book"><span class="finish"><img src=$img title="$finished%" width="$width" height="5" align="absmiddle"/> <a href="download/$id/"><img src="/site_media/img/save.png" title="Download in multi files" align="absmiddle"/></a> <a href="download/$id/?onefile=true"><img src="/site_media/img/save_one.png" title="Download in one file" align="absmiddle"/></a></span> <a href="$url">$title</a></li>'.template(this));
+        tr.append('<td width="40"><img src=$img title="$finished%" width="$width" height="5" align="absmiddle"/></td><td width="30%"><a href="download/$id/"><img src="/site_media/img/save.png" title="Download in multi files" align="absmiddle"/></a> <a href="download/$id/?onefile=true"><img src="/site_media/img/save_one.png" title="Download in one file" align="absmiddle"/></a> <a href="$url">$title</a></td>'.template(this));
     });
-    $(o).empty().append(ol);
+    $(o).empty().append(table);
+};
+
+process_booklist = function(data){
+    var data = data.evalJson().data;
+    createbookslist(data[2], $('#books'));
+    $('#pages').empty().paginate('booklist/', data[0], data[1]).append('<br style="clear:both;"/>');
+    $('#pages a').click(function(){
+        var href = this.href;
+        $.get(href, process_booklist);
+        return false;
+    });
 }
 
+tab_click = function(t, d, h){
+    if(d.id == 'booklist'){
+        $.get('booklist/', process_booklist);
+    }
+};
+
+on_success_finish = function(e, r){
+    $('.tabs').triggerTab(2);
+};
+
 $(document).ready(function (){
-    $('.tabs').tabs();
+    $('.tabs').tabs({onClick:tab_click});
 
-	$('#form_addbook').jform();
+	$('#form_addbook').jform({on_success_finish:on_success_finish});
 
-	$.get('booklist/', function(data){
-		var d = data.evalJson();
-		createbookslist(d.data, $('#books'));
-	});
 });
 </script>
 {% endblock %}
@@ -38,7 +60,7 @@ $(document).ready(function (){
 <div id="addbook">
 <div id="message"></div>
 <form action="add/" id="form_addbook">
-<p><input name="url" size="55"/><input type="submit" value="Get"/></p>
+<p>输入想下载书的目录URL <input name="url" size="55"/> <input type="submit" value="执行"/></p>
 </form>
 </div>
 </center>
@@ -56,16 +78,11 @@ $(document).ready(function (){
     如果你希望了解本项目的源码，可以看[关于本站]的介绍。本项目为开源项目。
    </div>
    <div id="booklist" class="fragment">
-      <a href="http://en.wikipedia.org/wiki/Comet_(programming)">Comet</a> is the new hipness in web development; a method to allow real-time two-way communication between the browser & the server.  In basic terms, it is simply an Ajax request that does not close immediately; as a result, the server can send new data at any time, and the browser can process that information accordingly.  Google uses this technique for their web-based gtalk client. 
-      <br />
-      <br />
-      In theory, Comet is fantastic.  In practice, however, each browser engine has it's own way of making the client side difficult.  IE & Safari, for example, do not allow data to be read from the server until the request is complete.  
-      Firefox, although allowing the incomplete data to be read, calls the onreadystatechange function at regular intervals, even though the readystate value has not changed.  From my perspective, Opera has the most consistent implementation of xmlhttprequest, which is strange because Microsoft created the principle back in the mid-ninetees.  
-      <br />
-      <br />
-      But I digress.
-      <br />
-      <br />
+        <center><form action="search/">
+        输入要查找的书名 <input type="text" size="30" name="search"/> <input type="submit" value="查询"/>
+        </form></center>
+        <div id="books"></div>
+        <div id="pages"></div>
    </div>
    <div id="sites" class="fragment">
       {% pycall plugins.show_sites(6) %}
@@ -77,8 +94,8 @@ $(document).ready(function (){
    </div>
 </div>
 
-<div id="books"></div>
 <center>
+<br />
 <div>©limodou</div>
 </center>
 {% endblock %}
