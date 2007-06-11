@@ -1,8 +1,13 @@
-{% load i18n %}
+{% load i18n utiltags %}
 {% extends "zipbooks/base.html" %}
+{% block css %}
+<link href="/site_media/css/tabs.css" rel="stylesheet" type="text/css" />
+<link href="/site_media/css/tabs_ie.css" rel="stylesheet" type="text/css" />
+{% endblock %}
 {% block js %}
 <script type="text/javascript" src="/site_media/js/jquery.formbuilder.js"></script>
 <script type="text/javascript" src="/site_media/js/jquery.jform.js"></script>
+<script type="text/javascript" src="/site_media/js/jquery.tabs.pack.js"></script>
 <script type="text/javascript">
 createbookslist = function(data, o){
     var ol = $('<ol></ol>');
@@ -15,8 +20,9 @@ createbookslist = function(data, o){
 }
 
 $(document).ready(function (){
+    $('.tabs').tabs();
+
 	$('#form_addbook').jform();
-	
 
 	$.get('booklist/', function(data){
 		var d = data.evalJson();
@@ -36,6 +42,41 @@ $(document).ready(function (){
 </form>
 </div>
 </center>
+<div class="tabs">
+   <ul class="anchors">
+      <li><a href="#whatsnew">最新更新</a></li>
+      <li><a href="#booklist">已有书目</a></li>
+      <li><a href="#sites">支持站点</a></li>
+      <li><a href="#about">关于本站</a></li>
+   </ul>
+   <div id="whatsnew" class="fragment">
+      本项目还在开发中，正在增加更多的站点支持，如果你感兴趣请关注本站。如果你有什么建议也请与我联系。当然我不一定会有能力实现你的要求。我的邮箱： limodou at gmail.com。
+    <br />
+    <br />
+    如果你希望了解本项目的源码，可以看[关于本站]的介绍。本项目为开源项目。
+   </div>
+   <div id="booklist" class="fragment">
+      <a href="http://en.wikipedia.org/wiki/Comet_(programming)">Comet</a> is the new hipness in web development; a method to allow real-time two-way communication between the browser & the server.  In basic terms, it is simply an Ajax request that does not close immediately; as a result, the server can send new data at any time, and the browser can process that information accordingly.  Google uses this technique for their web-based gtalk client. 
+      <br />
+      <br />
+      In theory, Comet is fantastic.  In practice, however, each browser engine has it's own way of making the client side difficult.  IE & Safari, for example, do not allow data to be read from the server until the request is complete.  
+      Firefox, although allowing the incomplete data to be read, calls the onreadystatechange function at regular intervals, even though the readystate value has not changed.  From my perspective, Opera has the most consistent implementation of xmlhttprequest, which is strange because Microsoft created the principle back in the mid-ninetees.  
+      <br />
+      <br />
+      But I digress.
+      <br />
+      <br />
+   </div>
+   <div id="sites" class="fragment">
+      {% pycall plugins.show_sites(6) %}
+   </div>
+   <div id="about" class="fragment">
+      本站为开源项目，代码在 <a href="http://code.google.com/p/zipbook/">ZipBook</a> 可以找到。它是使用Django+jQuery开发的。项目遵守BSD版权发布。
+      <br />
+      作者：limodou <a href="http://www.donews.net/limodou">访问Blog</a>
+   </div>
+</div>
+
 <div id="books"></div>
 <center>
 <div>©limodou</div>
