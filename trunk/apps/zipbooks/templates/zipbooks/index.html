@@ -12,7 +12,7 @@
 createbookslist = function(data, o){
     var ol = $('<ol></ol>');
     $.each(data, function(){
-        this.width = this.finished /100 * 20;
+        this.width = this.finished /100 * 40;
         this.img = this.finished==100?"/site_media/img/finish.jpg":"/site_media/img/unfinish.jpg";
         ol.append('<li class="book"><span class="finish"><img src=$img title="$finished%" width="$width" height="5" align="absmiddle"/> <a href="download/$id/"><img src="/site_media/img/save.png" title="Download in multi files" align="absmiddle"/></a> <a href="download/$id/?onefile=true"><img src="/site_media/img/save_one.png" title="Download in one file" align="absmiddle"/></a></span> <a href="$url">$title</a></li>'.template(this));
     });
