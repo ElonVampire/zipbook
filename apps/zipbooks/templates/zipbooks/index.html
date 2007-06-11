@@ -7,17 +7,14 @@
 createbookslist = function(data, o){
     var ol = $('<ol></ol>');
     $.each(data, function(){
-        ol.append('<li class="book"><a href="$url">$title</a> $finished [<a href="download/$id/">Download</a>][<a href="download/$id/?onefile=true">One File</a>]</li>'.template(this));
+        this.width = this.finished /100 * 20;
+        this.img = this.finished==100?"/site_media/img/finish.jpg":"/site_media/img/unfinish.jpg";
+        ol.append('<li class="book"><span class="finish"><img src=$img title="$finished%" width="$width" height="5" align="absmiddle"/> <a href="download/$id/"><img src="/site_media/img/save.png" title="Download in multi files" align="absmiddle"/></a> <a href="download/$id/?onefile=true"><img src="/site_media/img/save_one.png" title="Download in one file" align="absmiddle"/></a></span> <a href="$url">$title</a></li>'.template(this));
     });
     $(o).empty().append(ol);
 }
 
 $(document).ready(function (){
-	var form = $('#addbook').formbuilder({action:"add/", id:"form_addbook"});
-	form.add($.DIV({id:"message"}));
-	form.addSimpleLine('{% trans "URL" %}:', $.TEXT({name:'url',className:'field'}), {required:true});
-	var footer=form.line($.SUBMIT({name:'submit', value:'Get'})).attr({className:'ft'});
-	form.add(footer);
 	$('#form_addbook').jform();
 	
 
@@ -30,7 +27,17 @@ $(document).ready(function (){
 {% endblock %}
 
 {% block content %}
-<h1>ZipBook</h1>
-<div id="addbook"></div>
+<center>
+<img src="/site_media/img/zipbook.jpg"/>
+<div id="addbook">
+<div id="message"></div>
+<form action="add/" id="form_addbook">
+<p><input name="url" size="55"/><input type="submit" value="Get"/></p>
+</form>
+</div>
+</center>
 <div id="books"></div>
+<center>
+<div>©limodou</div>
+</center>
 {% endblock %}

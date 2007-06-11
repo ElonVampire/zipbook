@@ -15,10 +15,10 @@ def add(request):
     if f:
         try:
             f, msg = getbook(v.clean_data()['url'])
-        except:
+        except Exception, e:
             import traceback
             traceback.print_exc()
-            return ajax_fail(message='error')
+            return ajax_fail(message=str(e))
         if f:
             return ajax_ok({'id':msg.id}, message='Successful!', next='')
         else:
@@ -28,7 +28,7 @@ def add(request):
 def booklist(request):
     s = []
     for o in Book.objects.all():
-        s.append({'id':o.id, 'title':o.name, 'url':o.url, 'finished':'%d%%' % (o.finished*100/o.count)})
+        s.append({'id':o.id, 'title':o.name, 'url':o.url, 'finished':o.finished*100/o.count})
     return ajax_ok(s)
 
 def download(request, book_id):
@@ -46,7 +46,7 @@ def download(request, book_id):
         c = []
         for o in book.chapter_set.all():
             c.append(o.content)
-        f.addstring(book.name + '.txt', '\r\n\r\n'.join(c))
+        f.addstring(unicode(book.name, 'utf-8').encode('gb18030', 'ignore') + '.txt', '\r\n\r\n'.join(c))
     else:
         for o in book.chapter_set.all():
             f.addstring(("%04d" % o.order)+'.txt', o.content)
