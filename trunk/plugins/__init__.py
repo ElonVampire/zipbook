@@ -17,7 +17,7 @@ def show_sites(n):
             if i != 0:
                 s.append('</tr>')
             s.append('<tr>')
-        s.append('<td><a href="%s">%s</a></td>' % (url, title))
+        s.append('<td><a href="%s"><img src="/site_media/img/site.gif"/> %s</a></td>' % (url, title))
         i += 1
     if i>0:
         s.append('</tr>')

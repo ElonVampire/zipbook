@@ -5,6 +5,7 @@ from apps.zipbooks.models import Book
 from apps.zipbooks.validator import AddValidator
 from getbook import getbook
 from django.http import HttpResponse
+from utils.lib_page import Page
 
 def index(request):
     return render_template(request, 'zipbooks/index.html')
@@ -27,9 +28,14 @@ def add(request):
         
 def booklist(request):
     s = []
-    for o in Book.objects.all():
+    pagenum = 60
+    objs = Book.objects.all()
+    page = Page(objs, request, paginate_by=pagenum)
+    for o in page.object_list:
         s.append({'id':o.id, 'title':o.name, 'url':o.url, 'finished':o.finished*100/o.count})
-    return ajax_ok(s)
+    pages = (objs.count() + pagenum - 1) / pagenum
+    cur = int(request.GET.get('page', 1))
+    return ajax_ok((cur, pages, s))
 
 def download(request, book_id):
     from utils.zfile import ZFile
