@@ -85,3 +85,5 @@ INSTALLED_APPS = (
 )
 
 SITE_MEDIA = './media'
+CONTENT = 'db'
+CMD = './getbook.py'

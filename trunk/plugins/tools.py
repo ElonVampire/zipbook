@@ -1,4 +1,27 @@
 import re
+import pycurl
+import urllib
+
+def get_url(url, proxy=None):
+    c = pycurl.Curl()
+    c.setopt(pycurl.URL, url)
+    import StringIO
+    b = StringIO.StringIO()
+    c.setopt(pycurl.WRITEFUNCTION, b.write)
+    c.setopt(pycurl.FOLLOWLOCATION, 1)
+    c.setopt(pycurl.MAXREDIRS, 5)
+    c.setopt(pycurl.CONNECTTIMEOUT, 30)
+    c.setopt(pycurl.TIMEOUT, 300)
+    if not proxy:
+        proxy_host = urllib.getproxies().get('http', '')
+        if proxy_host:
+            proxy = {'host':proxy_host}
+    if proxy:
+        c.setopt(pycurl.PROXY, proxy['host'])
+        if proxy.get('user', ''):
+            c.setopt(pycurl.PROXYUSERPWD, '%s:%s' % (proxy['user'], proxy['password']))
+    c.perform()
+    return b.getvalue()
 
 def to_utf8(text, encoding='gb18030'):
     return unicode(text, encoding, 'ignore').encode('utf-8')
@@ -22,3 +45,5 @@ def format_html_text(text):
     text = re.sub(r'&#(\d+);', s, text)
     return text
     
+if __name__ == '__main__':
+    print get_url('http://www.sina.com/')

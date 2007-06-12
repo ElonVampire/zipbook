@@ -9,7 +9,7 @@ r_content = re.compile(r"<script src='(.*?\.txt)'></script>", re.DOTALL)
 r_title = re.compile(r'<title>(.*?)</title>', re.DOTALL)
 r_bookid = re.compile(r'function gotopage.*?&bl_id=(\d+)', re.DOTALL)
 
-def parse_title(text):
+def parse_title(text, proxy=None):
     r = r_subject.search(text)
     if r:
         subject = r.group(1)
@@ -17,7 +17,7 @@ def parse_title(text):
         subject = 'unknow'
     return tools.to_utf8(subject)
     
-def parse_index(text):
+def parse_index(text, proxy=None):
 #    r = r_meta.search(text)
 #    if r:
 #        encoding=r.group(1)
@@ -36,7 +36,7 @@ def parse_index(text):
         title = title.replace('&nbsp;', ' ')
         yield url, tools.to_utf8(title)
         
-def parse_page(title, text):
+def parse_page(title, text, proxy=None):
 #    r = r_meta.search(text)
 #    if r:
 #        encoding=r.group(1)
@@ -52,7 +52,7 @@ def parse_page(title, text):
     r = r_content.search(text)
     if r:
         url = r.group(1)
-        text = _get_page(url).strip()
+        text = tools.get_url(url, proxy).strip()
         b = "document.write('"
         e = "');"
         if text.startswith(b) and text.endswith(e):
@@ -61,27 +61,6 @@ def parse_page(title, text):
     else:
         text = ''
     return title + '\r\n'*2 + text
-
-import traceback
-import urllib
-def _get_page(url, proxy=None):
-    s = []
-    for i in range(3):
-        try:
-            f = urllib.urlopen(url, proxies=proxy)
-            print url
-            while 1:
-                text = f.read(1024)
-                if not text:
-                    break
-                print '.',
-                s.append(text)
-        except:
-            traceback.print_exc()
-            pass
-        else:
-            break
-    return ''.join(s)
 
 if __name__ == '__main__':
     text = file('cmfu_a.html').read()

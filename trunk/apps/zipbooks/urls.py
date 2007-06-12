@@ -7,5 +7,5 @@ urlpatterns = patterns('',
     (r'^booklist/$', 'apps.zipbooks.views.booklist'),
     (r'^download/(?P<book_id>\d+)/$', 'apps.zipbooks.views.download'),
     (r'^search/$', 'apps.zipbooks.views.search'),
-
+    (r'^monitor/$', 'apps.zipbooks.views.monitor'),
 )
