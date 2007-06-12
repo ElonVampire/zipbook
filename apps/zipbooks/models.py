@@ -30,7 +30,7 @@ class Book(models.Model):
         return self.name
     
     class Meta:
-        ordering = ['-date']
+        ordering = ['-name']
     
     class Admin:
         pass

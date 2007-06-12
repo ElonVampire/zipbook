@@ -30,9 +30,10 @@ def refresh_book(url, proxy=None):
         book.status = 1
         book.message = ''
         book.save()
-        get_chapters(s, proxy=proxy)
+        get_chapters(s, book.id, proxy=proxy)
     finally:
         book.status = 2
+        book.finished = book.chapter_set.filter(size__gt=0).count()
         book.save()
         
 def get_book(url, proxy=None):
@@ -60,6 +61,7 @@ def get_book(url, proxy=None):
                 return False, str(e)
         finally:
             book.status = 2
+            book.finished = book.chapter_set.filter(size__gt=0).count()
             book.save()
         print 'successful!'
     else:
@@ -89,36 +91,37 @@ def parse_index(baseurl, book, text, proxy):
         s.append((chapter.id, url, title))
     book.count = i
     book.save()
-    get_chapters(s, proxy=proxy)
+    get_chapters(s, book.id, proxy=proxy)
  
 import threading
 class Parse(threading.Thread):
-    def __init__(self, q, proxy=None):
+    def __init__(self, q, book_id, proxy=None):
         threading.Thread.__init__(self)
         self.q = q
+        self.book_id = book_id
         self.proxy = proxy
         self.setDaemon(True)
             
     def run(self):
         while not self.q.empty():
             (id, url, title) = self.q.get()
-            parse_page(id, url, title, self.proxy)
+            parse_page(self.book_id, id, url, title, self.proxy)
             
 import Queue
-def get_chapters(s, n=10, proxy=None):
+def get_chapters(s, book_id, n=10, proxy=None):
     q = Queue.Queue()
     for v in s:
         q.put(v)
     t = []
     for i in range(n):
-        v = Parse(q, proxy)
+        v = Parse(q, book_id, proxy)
         t.append(v)
         v.start()
         
     for i in t:
         i.join()
         
-def parse_page(id, url, title, proxy):
+def parse_page(book_id, id, url, title, proxy):
     print 'Getting...', url
     mod = get_module(url)
     chapter = Chapter.objects.get(pk=id)
@@ -127,12 +130,14 @@ def parse_page(id, url, title, proxy):
     if settings.CONTENT == 'db':
         chapter.content = content
     else:
-        path = os.path.join(settings.MEDIA_ROOT, 'zipbooks')
+        path = os.path.join(settings.MEDIA_ROOT, 'zipbooks', str(book_id))
         if not os.path.exists(path):
             os.makedirs(path)
         filename = os.path.join(path, "%04d.txt" % chapter.order)
         try:
-            file(filename, 'wb').write(content).close()
+            f = file(filename, 'wb')
+            f.write(content)
+            f.close()
         except:
             traceback.print_exc()
             print 'Getting...', url, 'Failed'

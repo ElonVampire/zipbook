@@ -85,5 +85,9 @@ INSTALLED_APPS = (
 )
 
 SITE_MEDIA = './media'
-CONTENT = 'db'
+CONTENT = 'file'
 CMD = './getbook.py'
+
+import os, sys
+
+PARAMS = (os.P_NOWAIT, sys.executable, 'python', os.path.abspath(CMD))
