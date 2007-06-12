@@ -6,6 +6,7 @@ modname = {
     'www.cmfu.com':('cmfu', '起点中文网', 'http://www.cmfu.com'),
     'www.17k.com':('17k', '17K文学网', 'http://www.17k.com'),
     'book.qq.com':('bookqq', '腾讯读书网', 'http://book.qq.com/'),
+    'cul.news.tom.com':('cultom', 'TOM书吧', 'http://cul.news.tom.com/'),
 }
 def get_mod(domain):
     return modname.get(domain, (None, None, None))[0]

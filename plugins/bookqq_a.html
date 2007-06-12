@@ -1,0 +1,1137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>草根血剑1_连载_读书_腾讯网</title>
+<link href="http://book.qq.com/css/model_page_basic.css" rel="stylesheet" type="text/css" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" media="all" type="text/css" href="http://book.qq.com/css/model_page_basic_ie.css" />
+<![endif]-->
+<link href="http://book.qq.com/s/tpl/12.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="http:book.qq.com/js/Ps.js"></script>
+<script language="javascript" src="http:book.qq.com/js/Login.js"></script>
+
+<script>
+var type=0;
+var id=0,cid=0;
+function checkLoginByCookie()
+{
+	var uin=getCookie("uin"),skey=getCookie("skey");
+	if(uin&&(skey!=""))
+	{
+		return uin;
+	}
+	else
+	{
+		return false;
+	}
+}
+function openmsg(obj)
+{
+	var mask = document.getElementById("mask");
+	var message = document.getElementById(obj);
+	var cw = document.documentElement.scrollWidth;
+	var ch = document.documentElement.clientHeight;
+	var ch2 = document.documentElement.scrollHeight;
+	mask.style.display = "block";
+	mask.style.height = ch2;
+	mask.style.left=0;
+	message.style.display = "block";
+	message.style.top = document.documentElement.scrollTop + (ch - message.clientHeight)/2 + "px";
+	message.style.left = (cw - message.clientWidth)/2 + "px";
+}
+function hiddenmsg(obj)
+{
+	var mask = document.getElementById("mask");
+	var message = document.getElementById(obj);
+	mask.style.display = "none";
+	message.style.display = "none";
+}
+function resize()
+{
+	var mask = document.getElementById("mask");
+	var cw = document.documentElement.clientWidth;
+	var ch = document.documentElement.clientHeight;
+	mask.style.height = ch;
+	
+	var message = document.getElementById('login');
+	
+	message.style.top = (ch - message.clientHeight)/2 + "px";
+	message.style.left = (cw - message.clientWidth)/2 + "px";
+}
+function nchangeImg()
+{
+	var img = document.getElementById("imgVerify");
+	img.src = "http://nverify.qq.com/getimage?" + Math.random();
+	var ctrl = document.getElementById("verifycode");
+	if (ctrl != null)
+	{
+		ctrl.focus();
+	}
+}
+function getCookie(name) {
+	var my_cookie = document.cookie;
+	var start = my_cookie.indexOf(name + "=");
+	if (start == -1) return '';
+	
+	start += name.length + 1; //1 stands of '='
+	
+	var end = my_cookie.indexOf(";" ,start);
+	if (end == -1) end = my_cookie.length;
+	return my_cookie.substr(start, end - start);
+}
+function setCookie(name, value) 
+{
+	document.cookie = name + "=" + value + "; path=/;expires=Thursday,01-Jan-2099 00:00:00 GMT;";
+}
+function process(form)
+{
+	if (!CheckForm())
+	{
+		return false;
+	}
+	preprocess(form);
+	return true;
+}
+function checkForm(form)
+{
+	setCookie('saveduin', Loginform.u.value);
+	if (form.u.value == "")
+	{
+		alert("请输入QQ号码!");
+		return false;
+	}
+	if (!/^[1-9]\d{4,8}$/.test(form.u.value))
+	{
+		alert("请输入正确的QQ号码!");
+		return false;
+	}
+	if (form.p.value == "")
+	{
+		alert("请输入QQ密码!");
+		return false;
+	}
+	if (form.verifycode.value == "")
+	{
+		alert("请输入验证码!");
+		return false;
+	}
+	switch(type)
+	{
+		case 0: form.u1.value="http://lianzai.book.qq.com/collect.php?id=9983&rurl="+escape(window.location.href); break;
+		case 1: form.u1.value="http://lianzai.book.qq.com/myfavor_lz.php"; break;
+		case 2: form.u1.value="http://lianzai.book.qq.com/loadc.php?id="+id+"&cid="+cid;; break;
+		default: form.u1.value=""; break;
+	}	
+	preprocess(form);
+	return true;
+}
+function cancel()
+{
+	window.location.href='http://book.qq.com/s/book/0/9/9983/index.shtml';
+}
+function collect()
+{
+	type=0;
+	if (checkLoginByCookie())//已登录
+	{
+		form1.action = "http://lianzai.book.qq.com/collect.php";
+		form1.rurl.value = escape(window.location.href);
+		form1.submit();
+	}
+	else
+	{
+		openmsg('login');
+		document.body.onresize = resize;
+		var user = getCookie("saveduin");
+		if (user == "") {
+			document.Loginform.u.focus();
+		} else {
+   	 		document.Loginform.u.value = user;
+   			document.Loginform.p.focus();
+		}
+	}
+}
+function loadc(pid,pcid)
+{
+	type=2;
+	id = pid;
+	cid = pcid;
+	if (checkLoginByCookie())//已登录
+	{
+		window.open("http://lianzai.book.qq.com/loadc.php?id="+pid+"&cid="+pcid,"_blank");
+	}
+	else
+	{
+		openmsg('login');
+		document.body.onresize = resize;
+		var user = getCookie("saveduin");
+		if (user == "") {
+			document.Loginform.u.focus();
+		} else {
+   	 		document.Loginform.u.value = user;
+   			document.Loginform.p.focus();
+		}
+	}
+}
+function comment()
+{
+		window.open("http://comment1.qq.com/comment.htm?site=book&id=28100","_blank");
+}
+function buy()
+{
+	if (0 == 0)
+	{
+			alert("免费书籍不需购买");
+	}
+	else
+	{
+		if (window.confirm("此书价格为0元，您确定购买吗？"))
+		{
+			window.location.href="http://mag.qq.com/cgi-bin/single_pay?bc=9983&bookname=草根血剑1：塑造国民性格的玄幻武侠&reading=&pg=&return_url=http%3A%2F%2Fbook.qq.com%2Fs%2Fbook%2F0%2F9%2F9983%2Findex.shtml";
+		}
+	}
+}
+function myfavor_lz()
+{
+	type=1;
+	if (checkLoginByCookie())//已登录
+	{
+		window.location.href="http://lianzai.book.qq.com/myfavor_lz.php";
+	}
+	else
+	{
+		openmsg('login');
+		document.body.onresize = resize;
+		var user = getCookie("saveduin");
+		if (user == "") {
+			document.Loginform.u.focus();
+		} else {
+   	 		document.Loginform.u.value = user;
+   			document.Loginform.p.focus();
+		}
+	}
+	//window.location.href="http://lianzai.book.qq.com/myfavor_lz.php";
+}
+function opennew(url)
+{
+	window.open(url,"_blank");
+}
+function rcm_book()
+{
+		form2.submit();
+}
+function splitAuthor(author)
+{
+	var authors = author.split(",");
+	var str="";
+	for (var i=0;i<authors.length;i++)
+	{
+		str += '<a href="http://lianzai.book.qq.com/index.php?type=author&key='+authors[i]+'" target="_blank">'+authors[i]+"</a> ";
+	}
+	return str;
+}
+</script>
+</head>
+
+<body>
+<script>
+document.write("<div style=\"position:absolute; left:0px; top:0px; width:0px; height:0px; z-index:0; visibility: hidden;\"><img src=\"http://219.133.38.204:8080/ping.php?id=9983&t=" + Math.random() + "\" height=\"0\" width=\"0\" /></div>");
+</script>
+<div id="mask"></div>
+<link href="/css/index910n.css" rel="stylesheet" type="text/css">
+
+<style>
+#ChannelPublicTop { 
+	width:910px;font-size:12px;color:#8C8E8C;height:25px;clear:both;
+	background:url(http://mat1.qq.com/www/images/public/topbg06.gif) repeat-x bottom}
+#ChannelPublicTop p{
+	margin:0;float:right;width:82px;line-height:25px;height:25px;text-align:center;
+	background:url(http://mat1.qq.com/www/images/public/topdot06.gif) no-repeat 0 8px;}
+#ChannelPublicTop p a{color:#8C8E8C;text-decoration:none}
+#ChannelPublicTop p a:hover{color:red}
+#ChannelPublicTop886 *{margin:0;padding:0}
+#ChannelPublicTop886{
+	font-size:12px;text-align:center;width:908px;
+	clear:both;background:#fff;line-height:12px;vertical-align: middle;border:1px solid #D6D7D6;
+	margin:0;padding:0;height:52px !important;height /**/:50px;}
+#ChannelPublicLeft{width:136px;float:left;height:50px;margin:0;padding:0;overflow:hidden;}
+#ChannelPublicRight{float:right;
+	font-size:12px;text-align:center;width:770px;
+	background:#fff;line-height:12px;vertical-align: middle;
+	margin:0 auto 2px auto;padding:0 0 6px 0;height:44px}
+#ChannelPublicRight ul{list-style:none;margin-left:8px;padding:0;}
+#ChannelPublicRight li a{color:black;font-size:12px;line-height:12px;text-decoration:none}
+#ChannelPublicRight li a:hover{color:red;line-height:12px}
+#ChannelPublicRight li a.reds:link,a.reds:visited{color:red;line-height:12px}
+#ChannelPublicRight li{
+	float:left;	width:41px !important;width /**/:42px;
+	border-right:1px solid black;margin:8px auto 2px auto;padding-top:1px} 
+#ChannelPublicRight li.gtEnd{float:left;width:40px;border:0px;font-size:12px}
+</style>
+<table width="910" border="0" cellspacing="0" cellpadding="0" align="center" style=" margin:0 auto;">
+  <tr>
+    <td>
+<div id="ChannelPublicTop">
+		<p><a href="#" onClick="window.external.AddFavorite(document.location.href,document.title)">加入收藏夹</a></p>
+		<p><a href="http://3g.qq.com" target="_blank">手机腾讯网</a></p>
+		<p><a href="http://www.qq.com" target="_top">腾讯网首页</a></p>
+</div>
+
+<div id="ChannelPublicTop886">
+<div id="ChannelPublicLeft"><a href="http://www.qq.com" target="_top"><img src="http://mat1.qq.com/www/images/public/publiclogo886.gif
+" width="136" height="50" border="0"></a></div>
+<div id="ChannelPublicRight">	
+	<ul>
+		
+		<li><a href="http://news.qq.com" target="_top">新闻</a></li>
+		<li><a href="http://ent.qq.com" target="_top">娱乐</a></li>
+		<li><a href="http://finance.qq.com" target="_top">财经</a></li>
+		<li><a href="http://tech.qq.com" target="_top">科技</a></li>
+		<li><a href="http://auto.qq.com" target="_top">汽车</a></li>
+		<li><a href="http://games.qq.com" target="_top">游戏</a></li>
+		<li><a href="http://edu.qq.com" target="_top">教育</a></li>
+		<li><a href="http://book.qq.com" target="_top">读书</a></li>
+		<li><a href="http://lady.qq.com" target="_top">女性</a></li>
+		<li><a href="http://astro.lady.qq.com" target="_top">星座</a></li>
+		<li><a href="http://flash.qq.com/" target="_blank">动画</a></li>
+		<li><a href="http://cq.qq.com/" target="_blank">重庆</a></li>
+		<li><a href="http://www.paipai.com" target="_blank">拍拍</a></li> 
+		<li><a href="http://baby.qq.com/" target="_blank">育儿</a></li>
+		<li><a href="http://dy.qq.com" target="_blank">订阅</a></li>
+		<li><a href="http://fm.qq.com" target="_blank">音频</a></li>
+		<li><a href="http://bbs.qq.com" target="_blank">论坛</a></li>
+		<li class="gtEnd"><a href="http://blog.qq.com" target="_blank"><font color="#FF0000">博客</font></a></li>
+	</ul> 
+	<ul>
+		<li><a href="http://sports.qq.com" target="_top">体育</a> 
+		<li><a href="http://yue.qq.com" target="_top">音乐</a></li>
+		<li><a href="http://stock1.finance.qq.com/" target="_top">证券</a></li>
+		<li><a href="http://digi.qq.com/" target="_top">数码</a></li>
+		<li><a href="http://shouji.qq.com/" target="_top">手机</a></li>
+		<li><a href="http://comic.qq.com/" target="_top">动漫</a></li>
+		<li><a href="http://gaokao.qq.com/" target="_top">高考</a></li>
+		<li><a href="http://mag.qq.com/" target="_top">杂志</a></li>
+		<li><a href="http://fashion.qq.com/" target="_top">时尚</a></li>
+		<li><a href="http://joke.qq.com" target="_top">笑话</a></li>
+		<li><a href="http://kid.qq.com/" target="_top">儿童</a></li>
+		<li><a href="http://xian.qq.com/" target="_blank">西安</a></li>
+		<li><a href="http://weather.news.qq.com/" target="_blank">天气</a></li>
+		<li><a href="http://qq.soufun.com/" target="_blank">房产</a></li>
+		<li><a href="http://news.qq.com/comments.htm" target="_top">评论</a></li>
+		<li><a href="http://bb.news.qq.com/" target="_blank">视频</a></li>
+		<li><a href="http://2008.qq.com/" target="_blank">奥运</a></li>
+		<li class="gtEnd"><a href="http://video.qq.com/" target="_blank">播客</a></li>
+	</ul>
+</div>
+</div></td>
+  </tr>
+</table>
+<!--topend-->
+
+<table width="910" border="0" align="center" cellpadding="0" cellspacing="0" id="topad">
+  <tr>
+    <td width="728"><iframe width=728 height=90 marginwidth=0 marginheight=0 hspace=0 vspace=0 frameborder=0 scrolling=no src="http://adsview.qq.com/adsview?c=book&l=Book_Width1&log=off"></iframe>
+</td>
+    <td width="7"></td>
+    <td width="175" class="topadline01 paddind15"> <a href="http://adsclick.qq.com/adsclick?oid=2693&url=http://game.qq.com" target="_blank">玩QQ游戏无处不在的快乐</a><br />
+      <a href="http://adsclick.qq.com/adsclick?oid=2694&url=http://kx.qq.com" target="_blank">凯旋凤凰永久免费更精彩</a><br />
+      <a href="http://adsclick.qq.com/adsclick?oid=2695&url=http://www.paipai.com/" target="_blank">上腾讯拍拍网　免费开店</a><br />
+      <a href="http://adsclick.qq.com/adsclick?oid=2696&url=http://magic.qq.com" target="_blank">让魔法表情给你百变心情</a></td>
+  </tr>
+</table>
+
+<table width="910" border="0" align="center" cellpadding="0" cellspacing="0" class="paddtba7">
+  <tr>
+    <td width="5" height="63" bgcolor="#414141"></td>
+    <td width="133"><img src="http://mat1.qq.com/book/images/img910/bookp00.jpg" width="133" height="63"></td>
+    <td width="772" valign="top" background="http://mat1.qq.com/book/images/img910/bookp01.jpg"><table width="772" border="0" cellspacing="0" cellpadding="0">
+        <tr> 
+          <td width="430" height="31" align="center" class="fontwhite paddind15"> 
+            <div align="left">&nbsp;<a href="http://book.qq.com" class="bsonl" target=_blank>读书首页</a><span class="paddind16">|</span><a href="http://yc.qq.com" class="bsonl" target=_blank>原创大赛</a><span class="paddind16">|</span><a href="http://cul.qq.com" class="bsonl" target=_blank>文化阵营</a><span class="paddind16">|</span><a href="http://mag.qq.com" class="bsonl" target=_blank>网络杂志</a><span class="paddind16" target="_blank">|</span><a href="http://book.qq.com/ssyd/index.htm" class="bsonl" target=_blank>读图时代</a></div></td>
+          <td width="97" height="31" align="center" valign="bottom" class="fontwhite"><a href="http://book.qq.com/lianzaiindex/lianzai_index.shtml"><img src="http://mat1.qq.com/book/images/img910/bookc_dy01.gif" width="79" height="28" border="0"></a></td>
+          <td width="245" class="fontwhite paddind15"><a href="http://book.qq.com/rankcount/rankcount_week.shtml" class="bsonl" target=_blank>好书排行</a><span class="paddind16">|</span><a href="http://y.book.qq.com" class="bsonl" target=_blank>少女馆</a><span class="paddind16">|</span><a href="http://blog.qq.com/cul/" class="bsonl" target=_blank>文化博客</a></td>
+        </tr>
+        <tr> 
+          <td height="32" colspan="3" align="left" class="paddind15"><span class="fontbold"><a href="http://lianzai.book.qq.com/index.php" class="blackrednl" target=_blank>总书库</span></a>&nbsp;&nbsp;<a href="http://lianzai.book.qq.com/index.php?type=sort&key=41" class="blackrednl" target=_blank><font color=red>独家全文（VIP）</font></a>&nbsp;&nbsp;<a href="http://lianzai.book.qq.com/index.php?type=sort&key=3" class="blackrednl" target=_blank>小说-青春</a>&nbsp;&nbsp;&nbsp;<a href="http://lianzai.book.qq.com/index.php?type=sort&key=4" class="blackrednl" target=_blank>小说-言情</a>&nbsp;&nbsp;<a href="http://lianzai.book.qq.com/index.php?type=sort&key=6" class="blackrednl" target=_blank>小说-奇侠</a>&nbsp;&nbsp;<a href="http://lianzai.book.qq.com/index.php?type=sort&key=7" class="blackrednl" target=_blank>小说-悬疑</a>&nbsp;&nbsp;<a href="http://lianzai.book.qq.com/index.php?type=sort&key=39" class="blackrednl" target=_blank>小说-其它</a>&nbsp;&nbsp;<a href="http://lianzai.book.qq.com/index.php?type=sort&key=13" class="blackrednl" target=_blank>人文社科</a>&nbsp;&nbsp;&nbsp;<a href="http://lianzai.book.qq.com/index.php?type=sort&key=8" class="blackrednl" target=_blank>生活时尚</a>&nbsp;&nbsp;&nbsp;<a href="http://lianzai.book.qq.com/index.php?type=sort&key=19" class="blackrednl" target=_blank>经管励志</a>&nbsp;&nbsp;&nbsp;<a href="http://lianzai.book.qq.com/index.php?type=sort&key=24" class="blackrednl" target=_blank>图文绘本</a></td>
+        </tr>
+      </table></td>
+  </tr>
+</table>
+<script language="javascript" src="http://pingjs.qq.com/ping.js"></script>
+<script language="javascript">
+if(typeof(pgvMain) == 'function')
+{
+pvCurDomain =  "lianzai.book.qq.com";//其他域名
+		pgvMain();
+}
+</script> 
+<script>
+  document.write("<iframe align=center width='910' height=42 frameborder=0 marginheight=0 marginwidth=0 scrolling=No allowtransparency='true' src=http://yuanchuang.book.qq.com/cgi-bin/user_cake_2?t=" + Math.random() + "></iframe>");
+</script>
+<!--<div style="width:910px;text-align:center;">
+	<span style="width:443px;"></span>
+	<span style="position:absolute;z-index:1000;visibility:visible;"><img width='100' src='http://nverify.qq.com/getimage?",Math.random(),"' onclick="changeImg()" title="点击可更换验证码"></span>
+</div>-->
+<div id="bookNav">
+  <div> 
+    您的位置：<a href="http://book.qq.com" target="_blank">腾讯读书</a> > 
+	          <a href="http://lianzai.book.qq.com" target="_blank">连载书库</a> > 
+			  <a href="http://lianzai.book.qq.com/index.php?type=sort&key=1" target="_blank">小说文艺</a> > <a href="http://lianzai.book.qq.com/index.php?type=sort&key=6" target="_blank">奇侠</a> > 
+			  草根血剑1：塑造国民性格的玄幻武侠
+  </div>
+</div>
+<!--图书信息-->
+<div id="bookIntro">
+  <div id="bookCover"><img src="http://mat1.qq.com/book/s/200705/16/14/117929827434386.jpg"width="160" height="226" alt="草根血剑1"/></div>
+  <div id="bookBrief">
+    <h1>草根血剑1：塑造国民性格的玄幻武侠</h1>
+    <p>有《亮剑》血性和《狼图腾》塑造国民性格精神的玄幻武侠！《草根血剑》充满东方文化魅力的武侠世界、草根式人物设置、赤诚的民族反思精神和由此所带来的&ldquo;激情畅阅&rdquo;体验让所有读者如痴如醉，网友一句&ldquo;不去长城不是中国人，不看草根血剑不是好汉！&rdquo;也成为这本书最好的注脚。</p>
+    <div class="bookinfo">
+      <div>作 者：
+	  <span><script>document.write(splitAuthor('海生'))</script>&nbsp;</span>		  
+	  </div>
+      <div>出 版：<a href="http://lianzai.book.qq.com/index.php?type=press&key=中国友谊出版公司" target="_blank">中国友谊出版公司</a>
+	  </div>
+      <div class=" tr">发布时间： 2007年06月04日</div>
+      <div class="cl"></div>
+    </div>
+    <div class="bookinfo">
+      <div> 类 型：
+		<a href="http://lianzai.book.qq.com/index.php?type=sort&key=1" target="_blank">小说文艺</a>&nbsp;&gt;&nbsp;<a href="http://lianzai.book.qq.com/index.php?type=sort&key=6"  target="_blank">奇侠</a>	  
+	  </div>
+      <div>定 价：免费</div>
+      <div class="cl"></div>
+    </div>
+    
+	<div class="bookinfo1">
+	  <div class="w fl">授权连载  不得转载</div>
+	  <div class="fl">
+	  <form name="form1">
+	  <input type="hidden" name="id" value="9983"/><input type="button" value="购买" class="input1" onclick="buy()" style="cursor:hand;"/><input type="button" value="收藏" class="input1" onclick="collect();" style="cursor:hand;"/><input type="button" value="评论" class="input1" onclick="comment();" style="cursor:hand;"/><input type="button" value="推荐" class="input1" onclick="rcm_book();" style="cursor:hand;"/><input type="button" value="我的书架" class="input2" style="cursor:hand;" onclick="myfavor_lz();return false;"/>
+	  <input type="hidden" name="rurl" value=""/>
+	  </form>
+	  </div>
+	  <div class="cl"></div>
+	</div>
+	
+  </div>
+  <div class="cl"></div>
+</div>
+<!--图书信息结束-->
+
+<!--相关图书，图书章节-->
+<div id="bookComment">
+  <!--相关阅读-->
+  
+  <div id="ChapterInfo">
+  	  <div id="Take" style="display:none">本书每0天将有0个章节释放为非vip章节<span style="display:none">，至第0节</span>，敬请关注!</div>  
+
+  <div>
+    <div class="tit"><span>1</span>第一部分</div>
+    
+    <p>黑暗之中，血魔洞隐隐透露出的红光映出一人身影，此人身着玄衣，头戴黑色面罩，矗立玄天涯之巅，任狂风将黑色披风吹得猎猎生风，自岿然不动，只不过人影时而被黑云所掩，时而浮现在云端，说不出的诡异、神秘。黑衣人忽然右手掣出一精光闪闪的匕首，匕落血溅！然后跪倒在地，口中念念有词，向血魔洞方向顶礼膜拜。血魔洞里传出一声快意的嘶吼，撼天动地，群山似乎都随之颤抖。</p>
+	<div class="ChapterList">
+      <div class="u"></div>
+	  <table cellpadding="0" cellspacing="5" class="ilist">
+        <tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/1.shtml')" >第1节：第一章血魔转世(1)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/2.shtml')">第2节：第一章血魔转世(2)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/3.shtml')" >第3节：第一章血魔转世(3)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/4.shtml')">第4节：第一章血魔转世(4)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/5.shtml')" >第5节：第一章血魔转世(5)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/6.shtml')">第6节：第一章血魔转世(6)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/7.shtml')" >第7节：第一章血魔转世(7)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/8.shtml')">第8节：第一章血魔转世(8)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/9.shtml')" >第9节：第二章神剑之死(1)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/10.shtml')">第10节：第二章神剑之死(2)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/11.shtml')" >第11节：第二章神剑之死(3)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/12.shtml')">第12节：第二章神剑之死(4)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/13.shtml')" >第13节：第二章神剑之死(5)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/14.shtml')">第14节：第二章神剑之死(6)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/15.shtml')" >第15节：第二章神剑之死(7)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/16.shtml')">第16节：第二章神剑之死(8)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/17.shtml')" >第17节：第三章天降飞仙(1)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/18.shtml')">第18节：第三章天降飞仙(2)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/19.shtml')" >第19节：第三章天降飞仙(3)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/20.shtml')">第20节：第三章天降飞仙(4)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/21.shtml')" >第21节：第三章天降飞仙(5)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/22.shtml')">第22节：第三章天降飞仙(6)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/23.shtml')" >第23节：第三章天降飞仙(7)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/24.shtml')">第24节：第四章亵衣之冤(1)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/25.shtml')" >第25节：第四章亵衣之冤(2)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/26.shtml')">第26节：第四章亵衣之冤(3)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/27.shtml')" >第27节：第四章亵衣之冤(4)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/28.shtml')">第28节：第四章亵衣之冤(5)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr>
+      </table>
+	  <div class="b"></div>
+	</div>
+  </div><div>
+    <div class="tit"><span>2</span>第二部分</div>
+    
+    <p>师母答应如此爽快，草根心中反倒不是滋味：是不是师母对我已经彻底失望了？唉，草根啊草根，连最疼爱你的师母也要遗弃你了！天下之大，到底还有谁关心你？只有父母、春水姐姐……还有小菱、小清子吧，不知道他们怎么样了？一定过得比我好吧，可千万别像我这般……</p>
+	<div class="ChapterList">
+      <div class="u"></div>
+	  <table cellpadding="0" cellspacing="5" class="ilist">
+        <tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/29.shtml')" >第29节：第四章亵衣之冤(6)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/30.shtml')">第30节：第四章亵衣之冤(7)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/31.shtml')" >第31节：第四章亵衣之冤(8)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/32.shtml')">第32节：第四章亵衣之冤(9)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/33.shtml')" >第33节：第五章剑峰悟剑(1)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/34.shtml')">第34节：第五章剑峰悟剑(2)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/35.shtml')" >第35节：第五章剑峰悟剑(3)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/36.shtml')">第36节：第五章剑峰悟剑(4)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/37.shtml')" >第37节：第五章剑峰悟剑(5)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/38.shtml')">第38节：第五章剑峰悟剑(6)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/39.shtml')" >第39节：第五章剑峰悟剑(7)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/40.shtml')">第40节：第六章神剑大殿(1)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/41.shtml')" >第41节：第六章神剑大殿(2)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/42.shtml')">第42节：第六章神剑大殿(3)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/43.shtml')" >第43节：第六章神剑大殿(4)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/44.shtml')">第44节：第六章神剑大殿(5)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/45.shtml')" >第45节：第六章神剑大殿(6)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/46.shtml')">第46节：第六章神剑大殿(7)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/47.shtml')" >第47节：第六章神剑大殿(8)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/48.shtml')">第48节：第六章神剑大殿(9)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/49.shtml')" >第49节：第七章血剑传闻(1)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/50.shtml')">第50节：第七章血剑传闻(2)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/51.shtml')" >第51节：第七章血剑传闻(3)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/52.shtml')">第52节：第七章血剑传闻(4)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/53.shtml')" >第53节：第七章血剑传闻(5)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/54.shtml')">第54节：第七章血剑传闻(6)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/55.shtml')" >第55节：第七章血剑传闻(7)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/56.shtml')">第56节：第七章血剑传闻(8)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr>
+      </table>
+	  <div class="b"></div>
+	</div>
+  </div><div>
+    <div class="tit"><span>3</span>第三部分</div>
+    
+    <p>泰山极顶三日悟道让草根已非昔日吴下阿蒙，泰山脚下黑衣蒙面人亲自示范，更让他见识剑法之极致！这招&quot;封神祭天&quot;居高临下，凌厉无匹，有让众生朝拜之威！草根神奇般接下了五剑，断其中一剑！草根来不及多想，人剑一体，冲向断剑那人！那人剑虽断，但甚为强悍，也飞身而起，竟然以自己的身体强阻草根去路！草根身后，四把长剑又已经袭来，退无可退！</p>
+	<div class="ChapterList">
+      <div class="u"></div>
+	  <table cellpadding="0" cellspacing="5" class="ilist">
+        <tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/57.shtml')" >第57节：第八章生死神幻(1)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/58.shtml')">第58节：第八章生死神幻(2)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/59.shtml')" >第59节：第八章生死神幻(3)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/60.shtml')">第60节：第八章生死神幻(4)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/61.shtml')" >第61节：第八章生死神幻(5)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/62.shtml')">第62节：第八章生死神幻(6)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/63.shtml')" >第63节：第八章生死神幻(7)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/64.shtml')">第64节：第九章争兄夺妹(1)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/65.shtml')" >第65节：第九章争兄夺妹(2)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/66.shtml')">第66节：第九章争兄夺妹(3)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/67.shtml')" >第67节：第九章争兄夺妹(4)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/68.shtml')">第68节：第九章争兄夺妹(5)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/69.shtml')" >第69节：第九章争兄夺妹(6)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/70.shtml')">第70节：第九章争兄夺妹(7)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/71.shtml')" >第71节：第九章争兄夺妹(8)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/72.shtml')">第72节：第十章嘉宁公主(1)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/73.shtml')" >第73节：第十章嘉宁公主(2)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/74.shtml')">第74节：第十章嘉宁公主(3)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/75.shtml')" >第75节：第十章嘉宁公主(4)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/76.shtml')">第76节：第十章嘉宁公主(5)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/77.shtml')" >第77节：第十章嘉宁公主(6)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/78.shtml')">第78节：第十章嘉宁公主(7)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/79.shtml')" >第79节：第十章嘉宁公主(8)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/80.shtml')">第80节：第十一章天下大势(1)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/81.shtml')" >第81节：第十一章天下大势(2)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/82.shtml')">第82节：第十一章天下大势(3)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/83.shtml')" >第83节：第十一章天下大势(4)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/84.shtml')">第84节：第十一章天下大势(5)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr>
+      </table>
+	  <div class="b"></div>
+	</div>
+  </div><div>
+    <div class="tit"><span>4</span>第四部分</div>
+    
+    <p>草根虽激动不已却也心乱如麻：到时候我如何启齿才能把这些东西送给梓菱姐呢？这么多东西，一起送出去恐怕不好吧！像处理破书一样……嗯！一件一件地送！先送哪一件好呢？先送雌链吧，那样的话，每日每夜我都可以跟梓菱姐说话了！然后每天送给梓菱姐一件礼物，她一定天天都开心！天天都想见到我！好！就这么办了……哎！我还是不知道该如何启齿啊……</p>
+	<div class="ChapterList">
+      <div class="u"></div>
+	  <table cellpadding="0" cellspacing="5" class="ilist">
+        <tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/85.shtml')" >第85节：第十一章天下大势(6)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/86.shtml')">第86节：第十一章天下大势(7)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/87.shtml')" >第87节：第十二章魔门圣君(1)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/88.shtml')">第88节：第十二章魔门圣君(2)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/89.shtml')" >第89节：第十二章魔门圣君(3)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/90.shtml')">第90节：第十二章魔门圣君(4)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/91.shtml')" >第91节：第十二章魔门圣君(5)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/92.shtml')">第92节：第十二章魔门圣君(6)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/93.shtml')" >第93节：第十二章魔门圣君(7)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/94.shtml')">第94节：第十二章魔门圣君(8)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/95.shtml')" >第95节：第十三章十大神兵(1)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/96.shtml')">第96节：第十三章十大神兵(2)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/97.shtml')" >第97节：第十三章十大神兵(3)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/98.shtml')">第98节：第十三章十大神兵(4)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/99.shtml')" >第99节：第十三章十大神兵(5)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/100.shtml')">第100节：第十三章十大神兵(6)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/101.shtml')" >第101节：第十三章十大神兵(7)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/102.shtml')">第102节：第十三章十大神兵(8)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/103.shtml')" >第103节：第十四章上古神兽(1)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/104.shtml')">第104节：第十四章上古神兽(2)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/105.shtml')" >第105节：第十四章上古神兽(3)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/106.shtml')">第106节：第十四章上古神兽(4)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/107.shtml')" >第107节：第十四章上古神兽(5)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/108.shtml')">第108节：第十四章上古神兽(6)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/109.shtml')" >第109节：第十四章上古神兽(7)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/110.shtml')">第110节： 第十五章逐鹿风云(1)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/111.shtml')" >第111节： 第十五章逐鹿风云(2)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/112.shtml')">第112节： 第十五章逐鹿风云(3)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/113.shtml')" >第113节： 第十五章逐鹿风云(4)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/114.shtml')">第114节： 第十五章逐鹿风云(5)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr>
+      </table>
+	  <div class="b"></div>
+	</div>
+  </div><div>
+    <div class="tit"><span>5</span>第五部分</div>
+    
+    <p>草根纳闷是谁给他画像，从背面看来，还挺像的，而且画中人比他本人还要英气迫人。当草根抽出锈剑的时候，周围传来几声窃笑。草根一剑斩下去，铁棍果然没有一丝反应，他回身过来，不胜腼腆道：&quot;不好意思，是因为我的剑好！&quot;窃笑立刻变成哄笑一片！不过，哄笑马上又被叫好声取代！铁棍竟然随着四起的哄笑折断！截面光洁如镜！</p>
+	<div class="ChapterList">
+      <div class="u"></div>
+	  <table cellpadding="0" cellspacing="5" class="ilist">
+        <tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/115.shtml')" >第115节： 第十五章逐鹿风云(6)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/116.shtml')">第116节： 第十五章逐鹿风云(7)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/117.shtml')" >第117节： 第十五章逐鹿风云(8)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/118.shtml')">第118节：第十六章千年伟业(1)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/119.shtml')" >第119节：第十六章千年伟业(2)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/120.shtml')">第120节：第十六章千年伟业(3)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/121.shtml')" >第121节：第十六章千年伟业(4)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/122.shtml')">第122节：第十六章千年伟业(5)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/123.shtml')" >第123节：第十六章千年伟业(6)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/124.shtml')">第124节：第十六章千年伟业(7)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/125.shtml')" >第125节：第十七章论剑赌局(1)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/126.shtml')">第126节：第十七章论剑赌局(2)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/127.shtml')" >第127节：第十七章论剑赌局(3)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/128.shtml')">第128节：第十七章论剑赌局(4)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/129.shtml')" >第129节：第十七章论剑赌局(5)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/130.shtml')">第130节：第十七章论剑赌局(6)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/131.shtml')" >第131节：第十七章论剑赌局(7)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/132.shtml')">第132节：第十七章论剑赌局(8)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/133.shtml')" >第133节：第十八章英雄四击(1)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/134.shtml')">第134节：第十八章英雄四击(2)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/135.shtml')" >第135节：第十八章英雄四击(3)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/136.shtml')">第136节：第十八章英雄四击(4)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/137.shtml')" >第137节：第十八章英雄四击(5)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/138.shtml')">第138节：第十八章英雄四击(6)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/139.shtml')" >第139节：第十八章英雄四击(7)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/140.shtml')">第140节：第十九章盟主礼遇(1)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/141.shtml')" >第141节：第十九章盟主礼遇(2)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/142.shtml')">第142节：第十九章盟主礼遇(3)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/143.shtml')" >第143节：第十九章盟主礼遇(4)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/144.shtml')">第144节：第十九章盟主礼遇(5)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          
+        </tr><tr>
+          <td><div><a href="javascript:opennew('http://book.qq.com/s/book/0/9/9983/145.shtml')" >第145节：第十九章盟主礼遇(6)</a>&nbsp;&nbsp;<span style="color:green;display:none">Vip!</span>&nbsp;<span style="color:red;display:none">New!</span></div></td>
+          <td><div>&nbsp;</div>
+          </td>
+          
+        </tr>
+      </table>
+	  <div class="b"></div>
+	</div>
+  </div>  
+  	<div style="width:98%">
+		<script>
+			document.domain = 'qq.com';
+			comment_para_site = 'book';
+			comment_para_id = 28100;
+			comment_para_is_group = 0;
+			comment_para_sum = 5;
+			comment_para_mode = '';
+			comment_para_show = 1;
+			comment_para_height = 0;
+			comment_para_style = 'http://news.qq.com/css/cmt_final_newcmt.css';
+			comment_para_submit_pos = 0;
+			comment_para_count_id = '';
+		</script>
+		<script src="http://pinglun.qq.com/js/comment_iframe.js" type="text/javascript"></script>     			
+    </div>
+  </div>
+  
+  <div id="Left">
+    <div class="divbd">
+	  <div id="BookAuthor">
+<div class="tit">作者简介</div>
+<div class="abrief">海生，男，自诩为中国文化卫道士，《狼图腾》的忠实拥趸，军事论坛最忠实地潜水者，有感于时，如鲠在喉，不吐不快，呕心沥血作《草根血剑》，无心置于网络，没成想激起响应无数，遂一夜成名。还未出版，小说前景便被多家影视、网游、动漫公司看好，引来《中国经营报》等多家媒体报道。</div>
+</div>
+            <div class="tit">此书读者还收藏了</div>
+      <div id="editorGroom">
+        <div class="line"> 
+		  <a href="http://book.qq.com/s/book/0/9/9983/index.shtml" target="_blank"><img src="http://mat1.qq.com/book/s/200705/16/14/117929827491691.jpg" width="63" height="88" alt="草根血剑1" /></a>          
+		  <p><strong><a href="http://book.qq.com/s/book/0/9/9983/index.shtml" target="_blank" title="草根血剑1">草根血剑1</a></strong><br />
+          作者：<a href="http://lianzai.book.qq.com/index.php?type=author&key=海生" target="_blank" title="海生">海生</a><br />
+          类别：<a href="http://lianzai.book.qq.com/index.php?type=sort&key=6" target="_blank">奇侠</a><br />
+          <span class="fcblack">[<a href="http://book.qq.com/s/book/0/9/9983/index.shtml" target="_blank">全文阅读</a>]</span></p>
+          <div class="cl"></div>
+        </div><div class="line"> 
+		  <a href="http://book.qq.com/s/book/0/5/5514/index.shtml" target="_blank"><img src="http://mat1.qq.com/book/s/200612/26/13/116711265940013.jpg" width="63" height="88" alt="盗墓笔记" /></a>          
+		  <p><strong><a href="http://book.qq.com/s/book/0/5/5514/index.shtml" target="_blank" title="盗墓笔记">盗墓笔记</a></strong><br />
+          作者：<a href="http://lianzai.book.qq.com/index.php?type=author&key=南派三叔" target="_blank" title="南派三叔">南派三叔</a><br />
+          类别：<a href="http://lianzai.book.qq.com/index.php?type=sort&key=6" target="_blank">奇侠</a><br />
+          <span class="fcblack">[<a href="http://book.qq.com/s/book/0/5/5514/index.shtml" target="_blank">全文阅读</a>]</span></p>
+          <div class="cl"></div>
+        </div><div class="line"> 
+		  <a href="http://book.qq.com/s/book/0/6/6004/index.shtml" target="_blank"><img src="http://mat1.qq.com/book/s/200703/30/15/117524104888605.jpg" width="63" height="88" alt="雪逝(2)" /></a>          
+		  <p><strong><a href="http://book.qq.com/s/book/0/6/6004/index.shtml" target="_blank" title="雪逝(2)">雪逝(2)</a></strong><br />
+          作者：<a href="http://lianzai.book.qq.com/index.php?type=author&key=月弧遐" target="_blank" title="月弧遐">月弧遐</a><br />
+          类别：<a href="http://lianzai.book.qq.com/index.php?type=sort&key=6" target="_blank">奇侠</a><br />
+          <span class="fcblack">[<a href="http://book.qq.com/s/book/0/6/6004/index.shtml" target="_blank">全文阅读</a>]</span></p>
+          <div class="cl"></div>
+        </div><div class="line"> 
+		  <a href="http://book.qq.com/s/book/0/9/9986/index.shtml" target="_blank"><img src="http://mat1.qq.com/book/s/200705/16/17/117930696538358.jpg" width="63" height="88" alt="佛本是道2" /></a>          
+		  <p><strong><a href="http://book.qq.com/s/book/0/9/9986/index.shtml" target="_blank" title="佛本是道2">佛本是道2</a></strong><br />
+          作者：<a href="http://lianzai.book.qq.com/index.php?type=author&key=梦入神机" target="_blank" title="梦入神机">梦入神机</a><br />
+          类别：<a href="http://lianzai.book.qq.com/index.php?type=sort&key=6" target="_blank">奇侠</a><br />
+          <span class="fcblack">[<a href="http://book.qq.com/s/book/0/9/9986/index.shtml" target="_blank">全文阅读</a>]</span></p>
+          <div class="cl"></div>
+        </div>
+      </div>
+	  <div class="tit" style="display:15;">编辑推荐</div>
+      <div id="editorGroom">
+        <div class="line"> 
+		  <a href="http://book.qq.com/s/book/0/6/6197/index.shtml" target="_blank"><img src="http://mat1.qq.com/book/s/200705/11/09/117884682485267.jpg" width="63" height="88" alt="幻想盟.第一辑" /></a>          
+		  <p><strong><a href="http://book.qq.com/s/book/0/6/6197/index.shtml" target="_blank" title="幻想盟.第一辑">幻想盟.第一辑</a></strong><br />
+          作者：<a href="http://lianzai.book.qq.com/index.php?type=author&key=幻想盟编辑部" target="_blank" title="幻想盟编辑部">幻想盟编..</a><br />
+          类别：<a href="http://lianzai.book.qq.com/index.php?type=sort&key=6" target="_blank">奇侠</a><br />
+          <span class="fcblack">[<a href="http://book.qq.com/s/book/0/6/6197/index.shtml" target="_blank">全文阅读</a>]</span></p>
+          <div class="cl"></div>
+        </div><div class="line"> 
+		  <a href="http://book.qq.com/s/book/0/6/6187/index.shtml" target="_blank"><img src="http://mat1.qq.com/book/s/200705/09/14/117869377384202.jpg" width="63" height="88" alt="天地神门2" /></a>          
+		  <p><strong><a href="http://book.qq.com/s/book/0/6/6187/index.shtml" target="_blank" title="天地神门2">天地神门2</a></strong><br />
+          作者：<a href="http://lianzai.book.qq.com/index.php?type=author&key=明镜" target="_blank" title="明镜">明镜</a><br />
+          类别：<a href="http://lianzai.book.qq.com/index.php?type=sort&key=6" target="_blank">奇侠</a><br />
+          <span class="fcblack">[<a href="http://book.qq.com/s/book/0/6/6187/index.shtml" target="_blank">全文阅读</a>]</span></p>
+          <div class="cl"></div>
+        </div><div class="line"> 
+		  <a href="http://book.qq.com/s/book/0/5/5250/index.shtml" target="_blank"><img src="http://mat1.qq.com/book/s/200611/17/17/116375668344489.jpg" width="63" height="88" alt="射日" /></a>          
+		  <p><strong><a href="http://book.qq.com/s/book/0/5/5250/index.shtml" target="_blank" title="射日">射日</a></strong><br />
+          作者：<a href="http://lianzai.book.qq.com/index.php?type=author&key=尚可" target="_blank" title="尚可">尚可</a><br />
+          类别：<a href="http://lianzai.book.qq.com/index.php?type=sort&key=6" target="_blank">奇侠</a><br />
+          <span class="fcblack">[<a href="http://book.qq.com/s/book/0/5/5250/index.shtml" target="_blank">全文阅读</a>]</span></p>
+          <div class="cl"></div>
+        </div><div class="line"> 
+		  <a href="http://book.qq.com/s/book/0/6/6150/index.shtml" target="_blank"><img src="http://mat1.qq.com/book/s/200704/27/19/117767347710910.jpg" width="63" height="88" alt="龙船长" /></a>          
+		  <p><strong><a href="http://book.qq.com/s/book/0/6/6150/index.shtml" target="_blank" title="龙船长">龙船长</a></strong><br />
+          作者：<a href="http://lianzai.book.qq.com/index.php?type=author&key=娜奥米-诺维克" target="_blank" title="娜奥米-诺维克">娜奥米-..</a><br />
+          类别：<a href="http://lianzai.book.qq.com/index.php?type=sort&key=6" target="_blank">奇侠</a><br />
+          <span class="fcblack">[<a href="http://book.qq.com/s/book/0/6/6150/index.shtml" target="_blank">全文阅读</a>]</span></p>
+          <div class="cl"></div>
+        </div><div class="line"> 
+		  <a href="http://book.qq.com/s/book/0/6/6144/index.shtml" target="_blank"><img src="http://mat1.qq.com/book/s/200704/27/16/117766227266094.jpg" width="63" height="88" alt="兵神3" /></a>          
+		  <p><strong><a href="http://book.qq.com/s/book/0/6/6144/index.shtml" target="_blank" title="兵神3">兵神3</a></strong><br />
+          作者：<a href="http://lianzai.book.qq.com/index.php?type=author&key=余为魄" target="_blank" title="余为魄">余为魄</a><br />
+          类别：<a href="http://lianzai.book.qq.com/index.php?type=sort&key=6" target="_blank">奇侠</a><br />
+          <span class="fcblack">[<a href="http://book.qq.com/s/book/0/6/6144/index.shtml" target="_blank">全文阅读</a>]</span></p>
+          <div class="cl"></div>
+        </div><div class="line"> 
+		  <a href="http://book.qq.com/s/book/0/6/6078/index.shtml" target="_blank"><img src="http://mat1.qq.com/book/s/200704/12/16/117636704940316.jpg" width="63" height="88" alt="天之逆子" /></a>          
+		  <p><strong><a href="http://book.qq.com/s/book/0/6/6078/index.shtml" target="_blank" title="天之逆子">天之逆子</a></strong><br />
+          作者：<a href="http://lianzai.book.qq.com/index.php?type=author&key=翼之梦" target="_blank" title="翼之梦">翼之梦</a><br />
+          类别：<a href="http://lianzai.book.qq.com/index.php?type=sort&key=6" target="_blank">奇侠</a><br />
+          <span class="fcblack">[<a href="http://book.qq.com/s/book/0/6/6078/index.shtml" target="_blank">全文阅读</a>]</span></p>
+          <div class="cl"></div>
+        </div><div class="line"> 
+		  <a href="http://book.qq.com/s/book/0/6/6040/index.shtml" target="_blank"><img src="http://mat1.qq.com/book/s/200704/05/15/117575965635486.jpg" width="63" height="88" alt="九州·英雄" /></a>          
+		  <p><strong><a href="http://book.qq.com/s/book/0/6/6040/index.shtml" target="_blank" title="九州·英雄">九州·英雄</a></strong><br />
+          作者：<a href="http://lianzai.book.qq.com/index.php?type=author&key=唐缺" target="_blank" title="唐缺">唐缺</a><br />
+          类别：<a href="http://lianzai.book.qq.com/index.php?type=sort&key=6" target="_blank">奇侠</a><br />
+          <span class="fcblack">[<a href="http://book.qq.com/s/book/0/6/6040/index.shtml" target="_blank">全文阅读</a>]</span></p>
+          <div class="cl"></div>
+        </div><div class="line"> 
+		  <a href="http://book.qq.com/s/book/0/4/4814/index.shtml" target="_blank"><img src="http://mat1.qq.com/book/s/200608/25/13/115648292935393.jpg" width="63" height="88" alt="江湖· 泪" /></a>          
+		  <p><strong><a href="http://book.qq.com/s/book/0/4/4814/index.shtml" target="_blank" title="江湖· 泪">江湖· 泪</a></strong><br />
+          作者：<a href="http://lianzai.book.qq.com/index.php?type=author&key=文泉杰" target="_blank" title="文泉杰">文泉杰</a><br />
+          类别：<a href="http://lianzai.book.qq.com/index.php?type=sort&key=6" target="_blank">奇侠</a><br />
+          <span class="fcblack">[<a href="http://book.qq.com/s/book/0/4/4814/index.shtml" target="_blank">全文阅读</a>]</span></p>
+          <div class="cl"></div>
+        </div><div class="line"> 
+		  <a href="http://book.qq.com/s/book/0/5/5185/index.shtml" target="_blank"><img src="http://mat1.qq.com/book/s/200611/08/17/116297950146603.jpg" width="63" height="88" alt="魔影流沙" /></a>          
+		  <p><strong><a href="http://book.qq.com/s/book/0/5/5185/index.shtml" target="_blank" title="魔影流沙">魔影流沙</a></strong><br />
+          作者：<a href="http://lianzai.book.qq.com/index.php?type=author&key=海汐" target="_blank" title="海汐">海汐</a><br />
+          类别：<a href="http://lianzai.book.qq.com/index.php?type=sort&key=6" target="_blank">奇侠</a><br />
+          <span class="fcblack">[<a href="http://book.qq.com/s/book/0/5/5185/index.shtml" target="_blank">全文阅读</a>]</span></p>
+          <div class="cl"></div>
+        </div><div class="line"> 
+		  <a href="http://book.qq.com/s/book/0/5/5847/index.shtml" target="_blank"><img src="http://mat1.qq.com/book/s/200702/22/13/117212270739653.jpg" width="63" height="88" alt="流光夜雪" /></a>          
+		  <p><strong><a href="http://book.qq.com/s/book/0/5/5847/index.shtml" target="_blank" title="流光夜雪">流光夜雪</a></strong><br />
+          作者：<a href="http://lianzai.book.qq.com/index.php?type=author&key=十四阙" target="_blank" title="十四阙">十四阙</a><br />
+          类别：<a href="http://lianzai.book.qq.com/index.php?type=sort&key=6" target="_blank">奇侠</a><br />
+          <span class="fcblack">[<a href="http://book.qq.com/s/book/0/5/5847/index.shtml" target="_blank">全文阅读</a>]</span></p>
+          <div class="cl"></div>
+        </div><div class="line"> 
+		  <a href="http://lianzai.book.qq.com/book/4138/index.htm" target="_blank"><img src="http://lianzai.book.qq.com/book/4138/images/63.jpg" width="63" height="88" alt="武侠宗师温瑞安的作品：温柔一刀" /></a>          
+		  <p><strong><a href="http://lianzai.book.qq.com/book/4138/index.htm" target="_blank" title="武侠宗师温瑞安的作品：温柔一刀">武侠宗师温瑞安的作品：温柔一刀</a></strong><br />
+          作者：<a href="http://lianzai.book.qq.com/index.php?type=author&key=温瑞安" target="_blank" title="温瑞安">温瑞安</a><br />
+          类别：<a href="http://lianzai.book.qq.com/index.php?type=sort&key=6" target="_blank">奇侠</a><br />
+          <span class="fcblack">[<a href="http://lianzai.book.qq.com/book/4138/index.htm" target="_blank">全文阅读</a>]</span></p>
+          <div class="cl"></div>
+        </div><div class="line"> 
+		  <a href="http://lianzai.book.qq.com/book/3801/index.htm" target="_blank"><img src="http://lianzai.book.qq.com/book/3801/images/63.gif" width="63" height="88" alt="天下(上)" /></a>          
+		  <p><strong><a href="http://lianzai.book.qq.com/book/3801/index.htm" target="_blank" title="天下(上)">天下(上)</a></strong><br />
+          作者：<a href="http://lianzai.book.qq.com/index.php?type=author&key=宁致远" target="_blank" title="宁致远">宁致远</a><br />
+          类别：<a href="http://lianzai.book.qq.com/index.php?type=sort&key=6" target="_blank">奇侠</a><br />
+          <span class="fcblack">[<a href="http://lianzai.book.qq.com/book/3801/index.htm" target="_blank">全文阅读</a>]</span></p>
+          <div class="cl"></div>
+        </div><div class="line"> 
+		  <a href="http://lianzai.book.qq.com/book/2269/index.htm" target="_blank"><img src="http://lianzai.book.qq.com/book/2269/images/x63.jpg" width="63" height="88" alt="轩辕绝" /></a>          
+		  <p><strong><a href="http://lianzai.book.qq.com/book/2269/index.htm" target="_blank" title="轩辕绝">轩辕绝</a></strong><br />
+          作者：<a href="http://lianzai.book.qq.com/index.php?type=author&key=龙人" target="_blank" title="龙人">龙人</a><br />
+          类别：<a href="http://lianzai.book.qq.com/index.php?type=sort&key=6" target="_blank">奇侠</a><br />
+          <span class="fcblack">[<a href="http://lianzai.book.qq.com/book/2269/index.htm" target="_blank">全文阅读</a>]</span></p>
+          <div class="cl"></div>
+        </div><div class="line"> 
+		  <a href="http://lianzai.book.qq.com/book/2667/index.htm" target="_blank"><img src="http://lianzai.book.qq.com/book/2667/images/63.jpg" width="63" height="88" alt="英特颂玄幻系列：小兵传奇" /></a>          
+		  <p><strong><a href="http://lianzai.book.qq.com/book/2667/index.htm" target="_blank" title="英特颂玄幻系列：小兵传奇">英特颂玄幻系列：小兵传奇</a></strong><br />
+          作者：<a href="http://lianzai.book.qq.com/index.php?type=author&key=玄雨" target="_blank" title="玄雨">玄雨</a><br />
+          类别：<a href="http://lianzai.book.qq.com/index.php?type=sort&key=4" target="_blank">言情</a><br />
+          <span class="fcblack">[<a href="http://lianzai.book.qq.com/book/2667/index.htm" target="_blank">全文阅读</a>]</span></p>
+          <div class="cl"></div>
+        </div><div class="line"> 
+		  <a href="http://lianzai.book.qq.com/book/4045/index.htm" target="_blank"><img src="http://lianzai.book.qq.com/book/4045/images/63.jpg" width="63" height="88" alt="超人气玄幻巨著：佣兵天下4" /></a>          
+		  <p><strong><a href="http://lianzai.book.qq.com/book/4045/index.htm" target="_blank" title="超人气玄幻巨著：佣兵天下4">超人气玄幻巨著：佣兵天下4</a></strong><br />
+          作者：<a href="http://lianzai.book.qq.com/index.php?type=author&key=说不得大师" target="_blank" title="说不得大师">说不得大..</a><br />
+          类别：<a href="http://lianzai.book.qq.com/index.php?type=sort&key=6" target="_blank">奇侠</a><br />
+          <span class="fcblack">[<a href="http://lianzai.book.qq.com/book/4045/index.htm" target="_blank">全文阅读</a>]</span></p>
+          <div class="cl"></div>
+        </div>
+      </div>
+	  
+	<div>  <div class="tit">专题精选</div>
+			<table width="100%"  border="0" cellspacing="0" cellpadding="0" class="ilist">
+  <tr>
+    <td colspan="4" scope="col"><div align="center"> 
+      <table width="100%"  border="0" cellspacing="3" cellpadding="0">
+        <tr>
+          <td scope="col"><table width="100%"  border="0" cellspacing="3" cellpadding="5">
+            <tr>
+              <td bordercolor="#333333" scope="col"><div align="center"><a href="http://book.qq.com/zt/2007/mimilaaini/index.htm" target="_blank"><img src="http://mat1.qq.com/book/images/dyy4/ban_qingchun_070604_4.jpg
+" width="174" height="80" border="1"></a></div></td>
+            </tr>
+            <tr>
+              <td scope="col"><div align="center"><a href="http://book.qq.com/zt/2007/mimilaaini/index.htm" target="_blank" class="blackrednl">米米拉妙笔生花 新作主角就是你</a></div></td>
+            </tr>
+            <tr>
+              <td bordercolor="#333333"><div align="center"><a href="http://book.qq.com/zt/2007/quleyuan/index.htm" target="_blank"><img src="http://mat1.qq.com/book/images/dyy4/ban_qingchun_070604_3.jpg
+" alt="" width="174" height="80" border="1"></a></div></td>
+            </tr>
+            <tr>
+              <td><div align="center"><a href="http://book.qq.com/zt/2007/quleyuan/index.htm" target="_blank" class="blackrednl">桃子夏&小妮子的趣乐园
+</a></div></td>
+            </tr>
+            <tr>
+              <td bordercolor="#333333"><div align="center"><a href="http://book.qq.com/zt/2007/weixiao2/index.htm" target="_blank"><img src="http://mat1.qq.com/book/images/dyy4/ban_qingchun_070604_5.jpg
+" alt="" width="174" height="80" border="1"></a></div></td>
+            </tr>
+            <tr>
+              <td><div align="center"><a href="http://book.qq.com/zt/2007/weixiao2/index.htm" target="_blank" class="blackrednl">如果微笑：寻找四叶草护身符</a></div></td>
+            </tr>
+          </table></td>
+        </tr>
+      </table>
+    </div>      </td>
+    </tr>
+</table></div><div>        <div class="tit">视觉阅读</div>
+			<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td colspan="4" scope="col"><div align="center"> 
+      <table width="100%"  border="0" cellspacing="3" cellpadding="0">
+        <tr>
+          <td scope="col"><table width="100%"  border="0" cellspacing="3" cellpadding="5">
+            <tr>
+              <td bordercolor="#333333" scope="col"><div align="center"><a href="http://book.qq.com/a/20070130/000033.htm" target="_blank"><img src="http://mat1.qq.com/book/images/imgxt/1/0131z3.jpg" width="174" height="80" border="1"></a></div></td>
+            </tr>
+            <tr>
+              <td scope="col"><div align="center"><a href="http://book.qq.com/a/20070130/000033.htm" target="_blank"  class="blackrednl">经典：2006年度最佳照片</a></div></td>
+            </tr>
+            <tr>
+              <td bordercolor="#333333"><div align="center"><a href="http://book.qq.com/a/20070123/000082.htm" target="_blank"><img src="http://mat1.qq.com/book/images/imgxt/1/0131z1.jpg" alt="" width="174" height="80" border="1"></a></div></td>
+            </tr>
+            <tr>
+              <td><div align="center"><a href="http://book.qq.com/a/20070123/000082.htm" target="_blank"  class="blackrednl">刘德华和梁朝伟的兄弟情谊</a></div></td>
+            </tr>
+            <tr>
+              <td bordercolor="#333333"><div align="center"><a href="http://book.qq.com/a/20070130/000054.htm" target="_blank"><img src="http://mat1.qq.com/book/images/imgxt/1/0131z5.jpg" alt="" name="" width="174" height="80" border="1"></a></div></td>
+            </tr>
+            <tr>
+              <td><div align="center"><a href="http://book.qq.com/a/20070130/000054.htm" target="_blank"  class="blackrednl">在中国的演进：四位小资女子</a></div></td>
+            </tr>
+          </table></td>
+        </tr>
+      </table>
+    </div>      </td>
+    </tr>
+</table>
+
+			</div>
+
+	  <div class="tit">专题编辑</div>
+<div id="editor">
+<div>
+  davidyang<br />
+  <a href="http://comment.qq.com/cgi-bin/comment_show?srv=book&amp;id=9087" target="_blank">给davidyang留言。。。</a>
+</div>
+</div>			 
+    </div>
+  </div>
+  <div class="cl"></div>
+</div>
+<form name="form2" target="xframe" action="http://lianzai.book.qq.com/rcm_book.php">
+<input type="hidden" name="id" value="9983"/>
+</form>
+
+<link href="http://book.qq.com/css/v2/basic.css" rel="stylesheet" type="text/css" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" media="all" type="text/css" href="http://book.qq.com/css/v2/basic_ie.css" />
+<![endif]-->
+<!--[if IE 7]>
+<link rel="stylesheet" media="all" type="text/css" href="http://book.qq.com/css/v2/basic_ie7.css" />
+<![endif]-->
+
+<div id="login" style="height:350px">
+  <div>
+    <div class="title">
+      <div class="fl">登录到我的帐户</div>
+      <div class="fr"><img src="http://mat1.qq.com/book/images/v2/close.gif" alt="关闭" onClick="cancel();return false;" /></div>
+      <span class="cl"></span> 
+	  </div>
+    <div class="logo"></div>
+    <form autocomplete="off" name="Loginform" action="http://ptlogin.qq.com/login" method="post" target="_top" onSubmit="return checkForm(this)">
+    <!--
+	<form autocomplete="off" name="Loginform" action="http://ptlogin.qq.com/login" method="post" onsubmit="setCookie('saveduin', Loginform.u.value);return preprocess(Loginform)" target="_top">
+	<input type=hidden name="h" value="1">
+	-->
+    <div class="inputinfo">
+      <div>QQ账号：</div>
+      <div><input name="u" id="u" type="text" value="" /></div>
+      <span class="cl"></span>
+    </div>
+    <div class="inputinfo">
+      <div>QQ密码：</div>
+      <div><input name="p" id="p" type="password" value="" /><br />
+        <a href="https://account.qq.com/cgi-bin/showMain?PcacheTime=1174040267" class="blue" target="_blank">忘了密码？</a> 
+	  </div>
+      <span class="cl"></span> 
+	</div>
+    <div class="inputinfo">
+      <div>验证码 ：</div>
+      <div><input name="verifycode" id="verifycode" type="text" value="" /><br /><a href="javascript:nchangeImg();" class="blue">看不清,换一张</a><br />
+        <script>document.write("<img id=imgVerify  width='130' height='53'  src='http://nverify.qq.com/getimage?",Math.random(),"'>")</script>
+      </div>
+      <span class="cl"></span> 
+	</div>
+    <div class="tc">
+      <input type="image" src="http://mat1.qq.com/book/images/v2/login.gif"/>&nbsp;&nbsp;
+	  <input type="image" src="http://mat1.qq.com/book/images/v2/reset.gif" onClick="cancel();return false;"/>
+	</div>
+    <div class="tr"><a href="http://freereg.qq.com/step1.shtml" target="_blank">申请QQ号</a></div>
+	 <input name="u1" type="hidden" value="">
+    </form>
+  </div>
+</div>
+
+<iframe name="xframe" width="0" height="0"></iframe>
+<style>
+#CopyRight2006 {font-size:12px;color:black;background:white;clear:both;margin:0 auto;}
+#CopyRight2006 a.tocft:link,a.tocft:visited{font-size:12px;color:black;text-decoration: none;}
+#CopyRight2006 a.tocft:hover{font-size:12px;color:red;text-decoration: underline;}
+</style>
+<table width="750" border="0" align="center" cellpadding="0" cellspacing="0" id="CopyRight2006">
+  <tr>
+    <td height="10" colspan="2"></td>
+  </tr>
+  <tr>
+    <td height="25" colspan="2" align="center"><a href="http://www.tencent.com/" class="tocft">关于腾讯 </a> | <a href="http://www.tencent.com/index_e.shtml" class="tocft">About Tencent </a> | <a href="http://www.qq.com/contract.shtml" class="tocft">服务条款 </a> | <a href="http://adver.qq.com/" class="tocft">广告服务 </a> | <a href="http://hr.tencent.com/" class="tocft">腾讯招聘 </a> | <a href="http://service.qq.com/" class="tocft">客服中心 </a> | <a href="http://www.qq.com/map/" class="tocft">网站导航 </a></td>
+  </tr>
+  <tr>
+    <td width="556" height="25" align="right">Copyright &copy; 1998 - 2007 TENCENT Inc. All Rights Reserved </td>
+    <td width="194" align="left"><a href="http://www.sznet110.gov.cn/netalarm/index.jsp" target="_blank"><img src="http://img1.qq.com/www/pics/816/816587.gif" hspace="5" border="0" /></a></td>
+  </tr>
+  <tr>
+    <td height="25" colspan="2" align="center">腾讯公司 版权所有</td>
+  </tr>
+</table>
+<div style="display:none;">
+<!-- START NNR Site Census V5.1 -->
+<!-- COPYRIGHT 2004 Nielsen // Netratings -->
+<script language="JavaScript" type="text/javascript">
+<!--
+	var _rsCI="cn-tencent";
+	var _rsCG="0";
+	var _rsDT=0;
+	var _rsDU=0; 
+	var _rsDO=0; 
+	var _rsX6=0;  
+	var _rsSI=escape(window.location);
+	var _rsLP=location.protocol.indexOf('https')>-1?'https:':'http:';
+	var _rsRP=escape(document.referrer);
+	var _rsND=_rsLP+'//secure-cn.imrworldwide.com/';
+
+	if (parseInt(navigator.appVersion)>=4)
+	{
+		var _rsRD=(new Date()).getTime();
+		var _rsSE=1;	
+		var _rsSV="";
+		var _rsSM=0.01;
+		_rsCL='<scr'+'ipt language="JavaScript" type="text/javascript" src="'+_rsND+'v51.js"><\/scr'+'ipt>';
+	}
+	else
+	{
+		_rsCL='<img src="'+_rsND+'cgi-bin/m?ci='+_rsCI+'&cg='+_rsCG+'&si='+_rsSI+'&rp='+_rsRP+'">';
+	}
+	document.write(_rsCL);
+//-->
+</script>
+<noscript>
+<img src="//secure-cn.imrworldwide.com/cgi-bin/m?ci=cn-tencent&amp;cg=0" alt="">
+</noscript>
+<!-- END NNR Site Census V5.1 -->
+</div>
+  
+</body>
+</html>
