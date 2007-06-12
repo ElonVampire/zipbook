@@ -15,13 +15,16 @@ class Tag(models.Model):
     class Admin:
         pass
     
+C_STATUS = [(0, 'waiting'), (1, 'processing'), (2, 'done')]
 class Book(models.Model):
     name = models.CharField(maxlength=100, db_index=True)
+    status = models.IntegerField(choices=C_STATUS, default=0)
     url = models.URLField()
     date = models.DateTimeField(auto_now=True)
     tags = models.ManyToManyField(Tag)
     count = models.IntegerField(default=0)
     finished = models.IntegerField(default=0)
+    message = models.CharField(maxlength=100, default='')
     
     def __str__(self):
         return self.name
@@ -32,13 +35,11 @@ class Book(models.Model):
     class Admin:
         pass
     
-C_STATUS = [(0, 'waiting'), (1, 'processing'), (2, 'done')]
 class Chapter(models.Model):
     order = models.IntegerField()
     name = models.CharField(maxlength=200, db_index=True)
     url = models.URLField()
     content = models.TextField(default='')
-    status = models.IntegerField(choices=C_STATUS, default=0)
     book = models.ForeignKey(Book)
     size = models.IntegerField(default=0)
     
@@ -56,6 +57,6 @@ def post_save_chapter(sender, instance, signal, *args, **kwargs):
         book = Book.objects.get(id=instance.book.id)
     except Book.DoesNotExist:
         return
-    book.finished = book.chapter_set.filter(status=2).count()
+    book.finished = book.chapter_set.filter(size__gt=0).count()
     book.save()
 dispatcher.connect(post_save_chapter , signal=signals.post_save, sender=Chapter)

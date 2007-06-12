@@ -3,9 +3,11 @@
 from utils.common import render_template
 from utils.ajax import ajax_ok, ajax_fail
 from apps.zipbooks.models import Book
-from getbook import getbook
 from django.http import HttpResponse
 from utils.lib_page import Page
+from django.conf import settings
+import os, sys
+import traceback
 
 def index(request):
     return render_template(request, 'zipbooks/index.html')
@@ -13,16 +15,8 @@ def index(request):
 def add(request):
     url = request.POST.get('url', '')
     if url:
-        try:
-            f, msg = getbook(url)
-        except Exception, e:
-            import traceback
-            traceback.print_exc()
-            return ajax_fail(message=str(e))
-        if f:
-            return ajax_ok({'id':msg.id}, message='处理成功')
-        else:
-            return ajax_fail(message=msg)
+        os.spawnl(os.P_NOWAIT, sys.executable, 'python', os.path.abspath(settings.CMD), 'get', url)
+        return ajax_ok(message="任务已经提交！请稍候下载。")
     return ajax_fail(message="请输入想下载书的目录URL")
         
 def booklist(request):
@@ -50,7 +44,20 @@ def download(request, book_id):
     if request.GET.get('onefile', ''):
         c = []
         for o in book.chapter_set.all():
-            c.append(o.content)
+            if settings.CONTENT == 'db':
+                c.append(o.content)
+            else:
+                filename = os.path.join(path, "%04d.txt" % o.order)
+                if os.path.exists(filename):
+                    fi = file(filename, 'rb')
+                    try:
+                        try:
+                            c.append(fi.read())
+                        except:
+                            traceback.print_exc()
+                            continue
+                    finally:
+                        fi.close()
         f.addstring(unicode(book.name, 'utf-8').encode('gb18030', 'ignore') + '.txt', '\r\n\r\n'.join(c))
     else:
         for o in book.chapter_set.all():
@@ -74,4 +81,10 @@ def search(request):
         s.append({'id':o.id, 'title':o.name, 'url':o.url, 'finished':o.finished*100/o.count})
     return ajax_ok(s)
                 
-        
+def monitor(request):
+    s = []
+    objs = Book.objects.filter(status__in=(0, 1))
+    for o in objs:
+        s.append({'id':o.id, 'title':o.name, 'url':o.url, 'finished':o.finished*100/o.count, 'status':o.status})
+    return ajax_ok(s)
+    
