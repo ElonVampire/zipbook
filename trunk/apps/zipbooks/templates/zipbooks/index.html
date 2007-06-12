@@ -20,13 +20,19 @@ createbookslist = function(data, o){
         }
         this.width = this.finished /100 * 40;
         this.img = this.finished==100?"/site_media/img/finish.jpg":"/site_media/img/unfinish.jpg";
-        tr.append('<td width="40"><img src=$img title="$finished%" width="$width" height="5" align="absmiddle"/></td><td width="30%"><a href="download/$id/"><img src="/site_media/img/save.png" title="Download in multi files" align="absmiddle"/></a> <a href="download/$id/?onefile=true"><img src="/site_media/img/save_one.png" title="Download in one file" align="absmiddle"/></a> <a href="$url">$title</a></td>'.template(this));
+        tr.append('<td width="40"><img src=$img title="$finished%" width="$width" height="5" align="absmiddle"/></td><td width="30%"><a href="download/$id/"><img src="/site_media/img/save.png" title="Download in multi files" align="absmiddle"/></a> <a href="download/$id/?onefile=true"><img src="/site_media/img/save_one.png" title="Download in one file" align="absmiddle"/></a> <a class="refresh" href="refresh/$id/"><img src="/site_media/img/begin.png" title="Refresh" align="absmiddle"/></a> <a class="refresh" href="add/$id/"><img src="/site_media/img/download.gif" title="Get again" align="absmiddle"/></a> <a href="$url">$title</a></td>'.template(this));
+        var _id = this.id;
         i++;
     });
     while(i%3!=0){
         tr.append('<td width="40">&nbsp;</td><td width="30%">&nbsp;</td>');
         i++;
     }
+    table.find('a.refresh').click(function(){
+        $('.tabs').triggerTab(3);
+        $.post(this.href);
+        return false;
+    });
     $(o).empty().append(table);
 };
 
@@ -54,7 +60,7 @@ createmonitor = function(data, o){
             this.status_msg = '处理完毕';
         }
         this.img = this.finished==100?"/site_media/img/finish.jpg":"/site_media/img/unfinish.jpg";
-        tr.append('<td width="40"><img src=$img title="$finished%" width="$width" height="5" align="absmiddle"/></td><td width="30%"><img src="$status_img" title="$status_msg" align="absmiddle"/><a href="$url">$title</a></td>'.template(this));
+        tr.append('<td width="40"><img src=$img title="$finished%" width="$width" height="5" align="absmiddle"/></td><td width="30%"><img src="$status_img" title="$status_msg" align="absmiddle"/> <a href="$url">$title</a></td>'.template(this));
         i++;
     });
     while(i%3!=0){
@@ -103,8 +109,7 @@ tab_hide = function(t, d, h){
 };
 
 on_success_finish = function(e, r){
-    $('.tabs').triggerTab(2);
-    $.post('booklist/', process_booklist);
+    $('.tabs').triggerTab(3);
 };
 
 on_success_finish_search = function(e, r){
