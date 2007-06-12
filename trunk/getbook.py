@@ -3,6 +3,7 @@ import urlparse
 import sys
 import os
 from optparse import OptionParser
+import time
 
 pwd = os.path.dirname(os.path.abspath(sys.argv[0]))
 sys.path.insert(0, pwd)
@@ -37,7 +38,7 @@ def refresh_book(url, proxy=None):
         book.save()
         
 def get_book(url, proxy=None):
-    print 'Grabbing...', url
+    print 'Grabbing...', url, time.strftime("%H:%M:%S")
     s = tools.get_url(url, proxy)
     if s:
         mod = get_module(url)
@@ -63,9 +64,9 @@ def get_book(url, proxy=None):
             book.status = 2
             book.finished = book.chapter_set.filter(size__gt=0).count()
             book.save()
-        print 'successful!'
+        print 'successful!', time.strftime("%H:%M:%S")
     else:
-        print 'Parsing URL(%s) failed!' % url
+        print 'Parsing URL(%s) failed!' % url, time.strftime("%H:%M:%S")
     
 def get_module(url):
     domain = urlparse.urlparse(url)[1]
@@ -81,14 +82,28 @@ def get_module(url):
         return mod
     
 def parse_index(baseurl, book, text, proxy):
+    from django.db import transaction
+    
     mod = get_module(baseurl)
     i = 0
     s = []
-    for (url, title) in mod.parse_index(text):
-        url = urlparse.urljoin(baseurl, url)
-        i += 1
-        chapter = Chapter.objects.create(name=title, order=i, url=url, book=book)
-        s.append((chapter.id, url, title))
+    
+    try:
+        transaction.enter_transaction_management()
+        transaction.managed(True)
+    
+        print 'index', time.strftime("%H:%M:%S")
+        for (url, title) in mod.parse_index(text):
+            url = urlparse.urljoin(baseurl, url)
+            i += 1
+            chapter = Chapter.objects.create(name=title, order=i, url=url, book=book)
+            s.append((chapter.id, url, title))
+            
+        transaction.commit() 
+    finally:
+        transaction.leave_transaction_management()
+    
+    print 'index end', time.strftime("%H:%M:%S")
     book.count = i
     book.save()
     get_chapters(s, book.id, proxy=proxy)
