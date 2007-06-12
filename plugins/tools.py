@@ -2,6 +2,16 @@ import re
 import pycurl
 import urllib
 
+def get_encoding(r, text):
+    b = r.search(text)
+    if b:
+        encoding=b.group(1)
+        if encoding.lower() == 'gb2312':
+            encoding = 'gb18030'
+    else:
+        encoding='gb18030'
+    return encoding
+
 def get_url(url, proxy=None):
     c = pycurl.Curl()
     c.setopt(pycurl.URL, url)
@@ -24,12 +34,18 @@ def get_url(url, proxy=None):
     return b.getvalue()
 
 def to_utf8(text, encoding='gb18030'):
+    encoding = encoding.lower()
+    if encoding in ('utf-8', 'utf8'):
+        return text
     return unicode(text, encoding, 'ignore').encode('utf-8')
 
 def to_encode(text, encoding='gb18030'):
+    encoding = encoding.lower()
+    if encoding in ('utf-8', 'utf8'):
+        return text
     return unicode(text, 'utf-8').encode(encoding, 'ignore')
     
-def format_html_text(text):
+def format_html_text(text, encoding='gb18030'):
     text = text.strip().replace('&nbsp;', ' ')
     text = re.sub(r'\n|\r', '', text)
     text = re.sub(r'(?i)<p>', '\r\n\r\n', text)
@@ -41,7 +57,7 @@ def format_html_text(text):
         if m.group(1):
             return unichr(int(m.group(1))).encode('utf-8')
         return m.group()
-    text = to_utf8(text)
+    text = to_utf8(text, encoding)
     text = re.sub(r'&#(\d+);', s, text)
     return text
     
