@@ -14,7 +14,15 @@ $.fn.jform = function(o, file/* true or false */){
 		messageid: '#message',
 		loadingimg: '/site_media/img/ajax_loading.gif',
 		reset: true,
-		file: file || false
+		file: file || false,
+		onsuccess: false,
+		ondata: false,
+		on_success_finish: false,
+		onerror: false,
+		on_error_finish: false,
+		onbegin: false,
+		oncomplete: false
+		
 	};
 	return this.each(function(){
 		var t = $(this);
@@ -50,6 +58,7 @@ $.jform = {
 					secureuri: false,
 					dataType: 'text',
 					beforeSend: function(){
+						$.jform.call_func(e, 'onbefore');
 						tg.attr('disabled', true).before('<img src="$0" class="loading" align="absmiddle"/>'.template([o.loadingimg]));
 					},
 					success: function(data){
@@ -61,6 +70,7 @@ $.jform = {
 					},
 					complete: function(){
 						tg.attr('disabled', false).prev('img.loading').remove();
+						$.jform.call_func(e, 'oncomplete');
 					}
 				});
 			}
@@ -70,6 +80,7 @@ $.jform = {
 					url: url,
 					data: $(e).getdict(),
 					beforeSend: function(r){
+						$.jform.call_func(e, 'onbefore');
 						tg.attr('disabled', true).before('<img src="$0" class="loading" align="absmiddle"/>'.template([o.loadingimg]));
 					},
 					success: function(data){
@@ -81,6 +92,7 @@ $.jform = {
 					},
 					complete: function(){
 						tg.attr('disabled', false).prev('img.loading').remove();
+						$.jform.call_func(e, 'oncomplete');
 					}
 				});
 			}
