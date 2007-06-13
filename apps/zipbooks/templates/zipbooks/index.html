@@ -122,7 +122,9 @@ $(document).ready(function (){
     $('.tabs').tabs({onClick:tab_click, onHide:tab_hide});
     $('.tabs').triggerTab(2);
 
-	$('#form_addbook').jform({on_success_finish:on_success_finish, delaytime:3000});
+	$('#form_addbook').jform({on_success_finish:on_success_finish, delaytime:3000, onbegin:function(e){
+        $('.tabs').triggerTab(3);
+    }});
 	$('#form_search').jform({on_success_finish:on_success_finish_search,
         messageid:'#search_msg', delaytime:3000});
 
