@@ -1,13 +1,48 @@
+import os
+from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
+
+app_dirs = []
+for app in settings.INSTALLED_APPS:
+    i = app.rfind('.')
+    if i == -1:
+        m, a = app, None
+    else:
+        m, a = app[:i], app[i+1:]
+    try:
+        if a is None:
+            mod = __import__(m, {}, {}, [])
+        else:
+            mod = getattr(__import__(m, {}, {}, [a]), a)
+    except ImportError, e:
+        raise ImproperlyConfigured, 'ImportError %s: %s' % (app, e.args[0])
+
+    app_dirs.append(os.path.dirname(mod.__file__))
+
 def get_full_path(request):
     full_path = ('http', ('', 's')[request.is_secure()], '://', request.META['HTTP_HOST'], request.path)
     return ''.join(full_path)
 
 from django.template import RequestContext
-from django.shortcuts import render_to_response
-def render_template(request, template_path, extra_context = {}):
-	c = RequestContext(request)
-	c.update(extra_context)
-	return render_to_response(template_path, context_instance=c)
+def render_template(request, template, context = {}):
+    c = RequestContext(request)
+    c.update(context)
+    ext = os.path.splitext(template)[1]
+    template_types = getattr(settings, 'TEMPLATE_TYPES', {})
+    if not template_types:
+        template_types = {'.mko':'mako'}
+    t = ''
+    for k, v in template_types.items():
+        if k.lower() == ext.lower():
+            t = v
+            break
+        
+    if t.lower() == 'mako':
+        from mako_django import render_to_response
+    else:
+        from django.shortcuts import render_to_response
+        
+    return render_to_response(template, context_instance=c)
 
 def get_func(string):
     module, func = string.rsplit('.', 1)

@@ -110,9 +110,10 @@ def parse_index(baseurl, book, text, proxy):
  
 import threading
 class Parse(threading.Thread):
-    def __init__(self, q, book_id, proxy=None):
+    def __init__(self, q, book_id, lock, proxy=None):
         threading.Thread.__init__(self)
         self.q = q
+        self.lock = lock
         self.book_id = book_id
         self.proxy = proxy
         self.setDaemon(True)
@@ -120,23 +121,25 @@ class Parse(threading.Thread):
     def run(self):
         while not self.q.empty():
             (id, url, title) = self.q.get()
-            parse_page(self.book_id, id, url, title, self.proxy)
+            parse_page(self.book_id, id, url, title, self.lock, self.proxy)
             
 import Queue
+import thread
 def get_chapters(s, book_id, n=10, proxy=None):
     q = Queue.Queue()
+    lock = thread.allocate_lock()
     for v in s:
         q.put(v)
     t = []
     for i in range(n):
-        v = Parse(q, book_id, proxy)
+        v = Parse(q, book_id, lock, proxy)
         t.append(v)
         v.start()
         
     for i in t:
         i.join()
         
-def parse_page(book_id, id, url, title, proxy):
+def parse_page(book_id, id, url, title, lock, proxy):
     print 'Getting...', url
     mod = get_module(url)
     chapter = Chapter.objects.get(pk=id)
@@ -157,8 +160,12 @@ def parse_page(book_id, id, url, title, proxy):
             traceback.print_exc()
             print 'Getting...', url, 'Failed'
             return
-    chapter.size = len(content)
-    chapter.save()
+    lock.acquire()
+    try:
+        chapter.size = len(content)
+        chapter.save()
+    finally:
+        lock.release()
     print 'Getting...', url, 'Done'
         
 def get_usage():
