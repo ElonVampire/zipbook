@@ -10,4 +10,5 @@ urlpatterns = patterns('',
     (r'^search/$', 'apps.zipbooks.views.search'),
     (r'^monitor/$', 'apps.zipbooks.views.monitor'),
     (r'^refresh/(?P<book_id>\d+)/$', 'apps.zipbooks.views.refresh'),
+    (r'^mako/$', 'utils.common.render_template', {'template': 'test.mko', 'context':{'hello':'hello'}}),
 )
