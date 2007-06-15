@@ -1,6 +1,8 @@
 # developed by huangyi
 # changed by limodou
 # MAKO_TEMPLATE_DIRS to TEMPLATE_DIRS
+# 2007/06/15
+#    add filesystem_checks option, according settings.DEBUG
 
 from django.conf import settings
 from django.http import HttpResponse
@@ -44,19 +46,22 @@ def default_module_name(filename, uri):
     '''
     return filename+'.py'
 
+filesystem_checks = settings.DEBUG
 module_dir = getattr(settings, 'MAKO_MODULE_DIR', None)
 if module_dir:
     lookup = TemplateLookup(directories=template_dirs,
-            module_directory=module_dir)
+            module_directory=module_dir, filesystem_checks=filesystem_checks)
 else:
     module_name_callable = getattr(settings, 'MAKO_MODULENAME_CALLABLE', None)
 
     if callable(module_name_callable):
         lookup = TemplateLookup(directories=template_dirs,
-                modulename_callable=module_name_callable)
+                modulename_callable=module_name_callable, 
+                filesystem_checks=filesystem_checks)
     else:
         lookup = TemplateLookup(directories=template_dirs,
-                modulename_callable=default_module_name)
+                modulename_callable=default_module_name, 
+                filesystem_checks=filesystem_checks)
 
 def select_template(template_name_list):
     for template_name in template_name_list:
