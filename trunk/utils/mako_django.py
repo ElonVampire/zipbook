@@ -2,7 +2,10 @@
 # changed by limodou
 # MAKO_TEMPLATE_DIRS to TEMPLATE_DIRS
 # 2007/06/15
-#    add filesystem_checks option, according settings.DEBUG
+#   add MAKO_FILESYSTEM_CHECKS option, default value is settings.DEBUG
+#   add MAKO_OUTPUT_ENCODING option, default value is settings.DEFAULT_CHARSET 
+#   add MAKO_INPUT_ENCODING option, default value is settings.DEFAULT_CHARSET
+#   add MAKO_DEFAULT_FILTERS option, default value is ['decode.' + settings.DEFAULT_CHARSET.replace('-', '_')]
 
 from django.conf import settings
 from django.http import HttpResponse
@@ -12,7 +15,7 @@ from mako.lookup import TemplateLookup
 from mako.exceptions import TopLevelLookupException
 import os
 
-from common import app_dirs
+from common import app_dirs, uni_str
 
 '''
 configurations:
@@ -46,22 +49,19 @@ def default_module_name(filename, uri):
     '''
     return filename+'.py'
 
-filesystem_checks = settings.DEBUG
+filesystem_checks = getattr(settings, 'MAKO_FILESYSTEM_CHECKS', settings.DEBUG)
+output_encoding = getattr(settings, 'MAKO_OUTPUT_ENCODING', settings.DEFAULT_CHARSET)
+input_encoding = getattr(settings, 'MAKO_INPUT_ENCODING', settings.DEFAULT_CHARSET)
+default_filters = getattr(settings, 'MAKO_DEFAULT_FILTERS', ['decode.' + settings.DEFAULT_CHARSET.replace('-', '_')])
 module_dir = getattr(settings, 'MAKO_MODULE_DIR', None)
-if module_dir:
-    lookup = TemplateLookup(directories=template_dirs,
-            module_directory=module_dir, filesystem_checks=filesystem_checks)
-else:
-    module_name_callable = getattr(settings, 'MAKO_MODULENAME_CALLABLE', None)
-
-    if callable(module_name_callable):
-        lookup = TemplateLookup(directories=template_dirs,
-                modulename_callable=module_name_callable, 
-                filesystem_checks=filesystem_checks)
-    else:
-        lookup = TemplateLookup(directories=template_dirs,
-                modulename_callable=default_module_name, 
-                filesystem_checks=filesystem_checks)
+module_name_callable = getattr(settings, 'MAKO_MODULENAME_CALLABLE', default_module_name)
+lookup = TemplateLookup(directories=template_dirs,
+        modulename_callable=module_name_callable, 
+        module_directory=module_dir, 
+        filesystem_checks=filesystem_checks,
+        output_encoding=output_encoding,
+        input_encoding=input_encoding,
+        default_filters=default_filters)
 
 def select_template(template_name_list):
     for template_name in template_name_list:
@@ -92,4 +92,5 @@ def render_to_response(template_name, dictionary=None,
         context_instance.update(dictionary)
     data = {}
     [data.update(d) for d in context_instance]
+    data = uni_str(data, encoding=settings.DEFAULT_CHARSET, key_convert=False)
     return HttpResponse(template.render(**data))

@@ -1,1 +1,2 @@
-<h1>${hello}</h1>
+##coding=utf-8
+<h1>这是中文的测试：${hello}</h1>

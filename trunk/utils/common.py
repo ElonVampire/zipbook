@@ -79,3 +79,30 @@ def setting(name, defaultvalue=''):
 #    args, kwargs = get_func_args(p, (4,5,6), {'b':'a'})
 #    print p(*args, **kwargs)
 #    
+
+def uni_str(a, encoding=None, key_convert=True):
+    if not encoding:
+        encoding = settings.DEFAULT_CHARSET
+    if isinstance(a, (list, tuple)):
+        s = []
+        for i, k in enumerate(a):
+            s.append(uni_str(k, encoding))
+        return s
+    elif isinstance(a, dict):
+        s = {}
+        for i, k in enumerate(a.items()):
+            key, value = k
+            if key_convert:
+                key = uni_str(key, encoding)
+            s[key] = uni_str(value, encoding)
+        return s
+    elif isinstance(a, unicode):
+        return a
+    elif isinstance(a, (int, float)):
+        return a
+    elif isinstance(a, str) or (hasattr(a, '__str__') and callable(getattr(a, '__str__'))):
+        if getattr(a, '__str__'):
+            a = str(a)
+        return unicode(a, encoding)
+    else:
+        return a
