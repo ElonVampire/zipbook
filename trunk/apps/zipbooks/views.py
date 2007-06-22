@@ -56,7 +56,7 @@ def booklist(request):
 
 def _get_content(book_id, path, o):
     if settings.CONTENT == 'db':
-        return o.content
+        return tools.to_encode(o.content, settings.OUTPUT_ENCODING)
     else:
         filename = os.path.join(path, str(book_id), "%04d.txt" % o.order)
         if os.path.exists(filename):
@@ -64,7 +64,7 @@ def _get_content(book_id, path, o):
                 f = file(filename, 'rb')
                 text = f.read()
                 f.close()
-                return text
+                return tools.to_encode(text, settings.OUTPUT_ENCODING)
             except:
                 traceback.print_exc()
         return ''

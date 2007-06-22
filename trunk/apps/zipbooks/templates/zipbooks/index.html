@@ -159,6 +159,9 @@ $(document).ready(function (){
     <br />
     <b>2007/06/12</b> 增加独立程序来运行抓取处理。并且可以在settings中设置数据存储方式是'db'为使用数据库，'file'为文件系统。增加任务监控功能。
     <br />
+    <br />
+    <b>2007/06/22</b>在settings.py中增加OUTPUT_ENCODING选项，可以用来控制生成的zip文件的内容是何种编码，缺省为gb18030。并且在plugins的__init__.py中，对于'www.'开头的域名应去掉。
+    <br />
    </div>
    <div id="booklist" class="fragment">
         <center><div id="search_msg"></div>

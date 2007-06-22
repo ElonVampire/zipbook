@@ -70,6 +70,8 @@ def get_book(url, proxy=None):
     
 def get_module(url):
     domain = urlparse.urlparse(url)[1]
+    if domain.startswith('www.'):
+        domain = domain[4:]
     if domain in modules:
         return modules[domain]
     else:

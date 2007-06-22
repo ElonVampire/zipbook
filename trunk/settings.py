@@ -91,3 +91,4 @@ CMD = './getbook.py'
 import os, sys
 
 PARAMS = (os.P_NOWAIT, sys.executable, 'python', os.path.abspath(CMD))
+OUTPUT_ENCODING = 'gb18030'
