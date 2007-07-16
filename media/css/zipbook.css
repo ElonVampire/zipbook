@@ -77,3 +77,9 @@ display:block;
 font-weight:normal;
 padding-top:5px;
 }
+
+.activefield {
+border:2px solid #ff0000;
+background-color:#ffc;
+}
+

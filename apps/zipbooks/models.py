@@ -9,7 +9,7 @@ from django.dispatch import dispatcher
 class Tag(models.Model):
     name = models.CharField(maxlength=20)
     
-    def __str__(self):
+    def __unicode__(self):
         return self.name
     
     class Admin:
@@ -26,7 +26,7 @@ class Book(models.Model):
     finished = models.IntegerField(default=0)
     message = models.CharField(maxlength=100, default='')
     
-    def __str__(self):
+    def __unicode__(self):
         return self.name
     
     class Meta:
@@ -46,7 +46,7 @@ class Chapter(models.Model):
     class Meta:
         ordering = ['order']
     
-    def __str__(self):
+    def __unicode__(self):
         return self.name
     
     class Admin:
