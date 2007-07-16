@@ -37,13 +37,17 @@ def to_utf8(text, encoding='gb18030'):
     encoding = encoding.lower()
     if encoding in ('utf-8', 'utf8'):
         return text
-    return unicode(text, encoding, 'ignore').encode('utf-8')
+    if not isinstance(text, unicode):
+        text = unicode(text, encoding, 'ignore')
+    return text.encode('utf-8')
 
 def to_encode(text, encoding='gb18030'):
     encoding = encoding.lower()
     if encoding in ('utf-8', 'utf8'):
         return text
-    return unicode(text, 'utf-8').encode(encoding, 'ignore')
+    if not isinstance(text, unicode):
+        text = unicode(text, 'utf-8')
+    return text.encode(encoding, 'ignore')
     
 def format_html_text(text, encoding='gb18030'):
     text = text.strip().replace('&nbsp;', ' ')

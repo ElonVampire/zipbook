@@ -145,7 +145,7 @@ def parse_page(book_id, id, url, title, lock, proxy):
     print 'Getting...', url
     mod = get_module(url)
     chapter = Chapter.objects.get(pk=id)
-    text = tools.get_url(url, proxy)
+    text = tools.get_url(url.encode('utf-8'), proxy)
     content = mod.parse_page(title, text)
     if settings.CONTENT == 'db':
         chapter.content = content
