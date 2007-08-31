@@ -55,13 +55,12 @@ input_encoding = getattr(settings, 'MAKO_INPUT_ENCODING', settings.DEFAULT_CHARS
 default_filters = getattr(settings, 'MAKO_DEFAULT_FILTERS', ['decode.' + settings.DEFAULT_CHARSET.replace('-', '_')])
 module_dir = getattr(settings, 'MAKO_MODULE_DIR', None)
 module_name_callable = getattr(settings, 'MAKO_MODULENAME_CALLABLE', default_module_name)
-lookup = TemplateLookup(directories=template_dirs,
-        modulename_callable=module_name_callable, 
-        module_directory=module_dir, 
-        filesystem_checks=filesystem_checks,
-        output_encoding=output_encoding,
-        input_encoding=input_encoding,
-        default_filters=default_filters)
+parameters = {'filesystem_checks':filesystem_checks,
+    'output_encoding':output_encoding, 'input_encoding':input_encoding,
+    'default_filters':default_filters, 'module_directory':module_dir,
+    'directories':template_dirs, 'modulename_callable':module_name_callable}
+parameters.update(getattr(settings, 'MAKO_PARAMETERS', {}))
+lookup = TemplateLookup(**parameters)
 
 def select_template(template_name_list):
     for template_name in template_name_list:
