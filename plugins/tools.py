@@ -51,6 +51,7 @@ def to_encode(text, encoding='gb18030'):
     
 def format_html_text(text, encoding='gb18030'):
     text = text.strip().replace('&nbsp;', ' ')
+    text = text.replace('&quot;', '"')
     text = re.sub(r'\n|\r', '', text)
     text = re.sub(r'(?i)<p.*?>', '\r\n\r\n', text)
     text = re.sub(r'(?i)<br.*?>', '\r\n', text)
